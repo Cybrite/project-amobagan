@@ -1,0 +1,26 @@
+
+FROM golang:1.24-alpine
+
+# Install air for hot reloading
+RUN go install github.com/air-verse/air@latest
+
+# Install additional tools if needed
+RUN apk add --no-cache git wget
+
+WORKDIR /app
+
+# Copy go mod files first for better caching
+COPY server/go.mod server/go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the rest of the application
+COPY server/ ./
+
+# Create tmp directory for air
+RUN mkdir -p tmp
+
+EXPOSE 8080
+
+CMD ["air"]

@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Port         string
 	GinMode      string
+	MongoURI     string
 }
 
 func LoadConfig() *Config {
@@ -20,6 +21,7 @@ func LoadConfig() *Config {
 	config := &Config{
 		Port:         getEnv("PORT", "8080"),
 		GinMode:      getEnv("GIN_MODE", "debug"),
+		MongoURI:     getEnv("MONGO_URI", ""),
 	}
 
 	return config
