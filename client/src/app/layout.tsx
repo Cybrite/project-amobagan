@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { WalletProvider } from "@/components/aptos_petra_wallet/WalletProvider";
+import { WalletProvider } from "@/components/features/aptos_petra_wallet/WalletProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
