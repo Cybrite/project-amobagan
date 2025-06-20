@@ -7,6 +7,7 @@ import (
 func SetupRoutes(router *gin.Engine) {	
 	setupRootRoutes(router)
 	setupApiRoutes(router)
+	setupWebSocketRoutes(router)
 }
 
 func setupRootRoutes(router *gin.Engine) {
