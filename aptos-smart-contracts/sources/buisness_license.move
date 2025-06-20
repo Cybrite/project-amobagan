@@ -42,21 +42,18 @@ module food_safety_contracts::business_license {
         move_to(account, registry);
     }
 
-    // Add authorization check for registry creation
     public fun create_registry(account: &signer) {
-        // Only allow the contract owner to create registry
         assert!(signer::address_of(account) == @food_safety_contracts, E_NOT_AUTHORIZED);
         init_module(account);
     }
 
-    // Add this view function to check if registry exists
     #[view]
     public fun registry_exists(account_addr: address): bool {
         exists<LicenseRegistry>(account_addr)
     }
 
     public entry fun issue_license(
-        admin: &signer, // our account that issues the license
+        admin: &signer,
         business_owner: address,
         license_id: String,
         business_name: String,
@@ -66,10 +63,8 @@ module food_safety_contracts::business_license {
     ) acquires LicenseRegistry {
         let admin_addr = signer::address_of(admin);
         
-        // Add authorization check
         assert!(admin_addr == @food_safety_contracts, E_NOT_AUTHORIZED);
-        
-        // Add validity check for years
+
         assert!(validity_years > 0, E_INVALID_EXPIRY_DATE);
         
         let current_time = timestamp::now_seconds();
@@ -118,7 +113,6 @@ module food_safety_contracts::business_license {
 
     #[view]
     public fun verify_license(license_id: String): bool acquires LicenseRegistry {
-        // Check if registry exists first
         if (!exists<LicenseRegistry>(@food_safety_contracts)) {
             return false
         };
