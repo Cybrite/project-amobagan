@@ -21,19 +21,6 @@ services:
         working_dir: /app
         networks:
             - app-network
-        healthcheck:
-            test:
-                [
-                    "CMD",
-                    "wget",
-                    "--quiet",
-                    "--tries=1",
-                    "--spider",
-                    "http://localhost:8080/health",
-                ]
-            interval: 30s
-            timeout: 10s
-            retries: 3
 
 networks:
     app-network:

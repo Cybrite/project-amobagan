@@ -11,7 +11,7 @@ import (
 var cfg = config.LoadConfig()
 func GenerateJWT(user models.User) (string, error) {
 	claims := jwt.MapClaims{
-		"userId": user.ID,
+		"userId": user.ID.Hex(),
 		"fullName": user.FullName,
 		"phoneNo": user.PhoneNo,
 		"petraWalletAddress": user.PetraWalletAddress,
@@ -24,13 +24,27 @@ func GenerateJWT(user models.User) (string, error) {
 	return token.SignedString([]byte(cfg.JWT_SECRET))
 }
 
-func VerifyJWT(token string) (string, error) {
+func VerifyJWT(token string) (jwt.MapClaims, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(cfg.JWT_SECRET), nil
 	})
 	if err != nil {
+		return nil, err
+	}
+	return claims, nil
+}
+
+func GetUserIDFromToken(token string) (string, error) {
+	claims, err := VerifyJWT(token)
+	if err != nil {
 		return "", err
 	}
-	return claims["sub"].(string), nil
+	
+	userID, ok := claims["userId"].(string)
+	if !ok {
+		return "", jwt.ErrSignatureInvalid
+	}
+	
+	return userID, nil
 }
