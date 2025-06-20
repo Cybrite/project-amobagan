@@ -1,6 +1,7 @@
-package config
+package lib
 
 import (
+	"amobagan/config"
 	"context"
 	"log"
 	"time"
@@ -11,7 +12,7 @@ import (
 
 var DB *mongo.Client
 
-func ConnectDB(config *Config) {
+func ConnectDB(config *config.Config) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(config.MongoURI))
 	if err != nil {
 		log.Fatal("Failed to create mongo client:", err)

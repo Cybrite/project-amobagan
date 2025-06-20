@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"amobagan/config"
+	"amobagan/lib"
 	"amobagan/routes"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 
-	config.ConnectDB(cfg)
+	lib.ConnectDB(cfg)
 
 	gin.SetMode(cfg.GinMode) // for detailed logging
 

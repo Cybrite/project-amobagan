@@ -11,6 +11,7 @@ type Config struct {
 	Port         string
 	GinMode      string
 	MongoURI     string
+	JWT_SECRET   string
 }
 
 func LoadConfig() *Config {
@@ -22,6 +23,7 @@ func LoadConfig() *Config {
 		Port:         getEnv("PORT", "8080"),
 		GinMode:      getEnv("GIN_MODE", "debug"),
 		MongoURI:     getEnv("MONGO_URI", ""),
+		JWT_SECRET:   getEnv("JWT_SECRET", ""),
 	}
 
 	return config
