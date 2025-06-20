@@ -12,6 +12,7 @@ type Config struct {
 	GinMode      string
 	MongoURI     string
 	JWT_SECRET   string
+	GeminiAPIKey string
 }
 
 func LoadConfig() *Config {
@@ -24,6 +25,8 @@ func LoadConfig() *Config {
 		GinMode:      getEnv("GIN_MODE", "debug"),
 		MongoURI:     getEnv("MONGO_URI", ""),
 		JWT_SECRET:   getEnv("JWT_SECRET", ""),
+		GeminiAPIKey: getEnv("GEMINI_API_KEY", ""),
+		
 	}
 
 	return config
