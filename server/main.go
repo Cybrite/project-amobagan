@@ -12,6 +12,7 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 
+	config.ConnectDB(cfg)
 
 	gin.SetMode(cfg.GinMode) // for detailed logging
 
