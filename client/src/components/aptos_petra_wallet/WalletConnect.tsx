@@ -1,0 +1,215 @@
+"use client";
+
+import { useState } from "react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { Wallet, Zap, Shield, ExternalLink, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
+const WalletConnect = () => {
+  const { connect, disconnect, account, connected, isLoading, wallets } =
+    useWallet();
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [copiedAddress, setCopiedAddress] = useState(false);
+
+  const handleConnect = async () => {
+    try {
+      setIsConnecting(true);
+      const petraWallet = wallets.find((wallet) => wallet.name === "Petra");
+      if (petraWallet) {
+        connect(petraWallet.name);
+        console.log("Connected to Petra wallet");
+      } else {
+        console.error("Petra wallet not found");
+        alert("Petra wallet not found. Please install Petra wallet extension.");
+      }
+    } catch (error) {
+      console.error("Failed to connect to wallet:", error);
+      alert(
+        "Failed to connect to wallet. Please make sure Petra wallet is installed and unlocked."
+      );
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      disconnect();
+      console.log("Disconnected from wallet");
+    } catch (error) {
+      console.error("Failed to disconnect from wallet:", error);
+    }
+  };
+
+  const copyAddress = async () => {
+    if (account?.address) {
+      await navigator.clipboard.writeText(account.address.toString());
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fillRule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fillOpacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
+
+      <Card className="relative w-full max-w-md bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center">
+            <Wallet className="w-8 h-8 text-white" />
+          </div>
+          <div>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Aptos Wallet
+            </CardTitle>
+            <CardDescription className="text-gray-400 mt-2">
+              Connect your Petra wallet to access the Aptos ecosystem
+            </CardDescription>
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          {connected ? (
+            <div className="space-y-4">
+              {/* Connection Status */}
+              <div className="flex items-center justify-center space-x-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-green-400 font-medium">Connected</span>
+                <Shield className="w-4 h-4 text-green-400" />
+              </div>
+
+              {/* Account Details */}
+              <Card className="bg-white/5 border-white/10">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg text-white flex items-center space-x-2">
+                    <Zap className="w-5 h-5 text-purple-400" />
+                    <span>Account Details</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-400">
+                      Address
+                    </label>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <code className="flex-1 text-xs bg-black/30 p-2 rounded border border-white/10 text-gray-300 break-all">
+                        {account?.address?.toString()}
+                      </code>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={copyAddress}
+                        className="text-gray-400 hover:text-white"
+                      >
+                        {copiedAddress ? (
+                          <Check className="w-4 h-4 text-green-400" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {account?.publicKey && (
+                    <>
+                      <Separator className="bg-white/10" />
+                      <div>
+                        <label className="text-sm font-medium text-gray-400">
+                          Public Key
+                        </label>
+                        <code className="block text-xs bg-black/30 p-2 rounded border border-white/10 text-gray-300 break-all mt-1">
+                          {Array.isArray(account.publicKey)
+                            ? account.publicKey.join(", ")
+                            : account.publicKey?.toString() ||
+                              String(account.publicKey)}
+                        </code>
+                      </div>
+                    </>
+                  )}
+
+                  {account?.ansName && (
+                    <>
+                      <Separator className="bg-white/10" />
+                      <div>
+                        <label className="text-sm font-medium text-gray-400">
+                          ANS Name
+                        </label>
+                        <p className="text-white mt-1">{account.ansName}</p>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Button
+                onClick={handleDisconnect}
+                variant="destructive"
+                className="w-full bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-red-400 hover:text-red-300"
+              >
+                Disconnect Wallet
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Not Connected Status */}
+              <div className="flex items-center justify-center space-x-2 p-3 bg-gray-500/10 border border-gray-500/20 rounded-lg">
+                <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                <span className="text-gray-400 font-medium">Not Connected</span>
+              </div>
+
+              <div className="text-center space-y-4">
+                <p className="text-gray-400 text-sm">
+                  Connect your Petra wallet to access decentralized applications
+                  on Aptos
+                </p>
+
+                <Button
+                  onClick={handleConnect}
+                  disabled={isConnecting || isLoading}
+                  className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none disabled:opacity-50"
+                >
+                  {isConnecting || isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Connecting...
+                    </>
+                  ) : (
+                    <>
+                      <Wallet className="w-5 h-5 mr-2" />
+                      Connect Petra Wallet
+                    </>
+                  )}
+                </Button>
+
+                <div className="flex items-center justify-center space-x-2 text-sm">
+                  <span className="text-gray-500">Don&apos;t have Petra?</span>
+                  <a
+                    href="https://petra.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-400 hover:text-purple-300 inline-flex items-center space-x-1 transition-colors"
+                  >
+                    <span>Download</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Available Wallets section could go here */}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default WalletConnect;
