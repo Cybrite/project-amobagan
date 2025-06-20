@@ -1,5 +1,5 @@
-import WalletConnect from "@/components/aptos_petra_wallet/WalletConnect";
+import OnboardingFlow from "@/components/features/onboarding_flow/onboarding";
 
 export default function Home() {
-  return <WalletConnect />;
+  return <OnboardingFlow />;
 }
