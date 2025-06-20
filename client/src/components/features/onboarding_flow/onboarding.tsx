@@ -6,13 +6,14 @@ import { useState } from "react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   User,
-  Mail,
   Phone,
   Store,
   UserCheck,
   ChevronRight,
   ArrowLeft,
   Zap,
+  Check,
+  AlertCircle,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,11 +29,12 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import WalletConnect from "../aptos_petra_wallet/WalletConnect";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface UserDetails {
   name: string;
-  email: string;
   phone: string;
+  password: string;
 }
 
 interface RoleOption {
@@ -44,15 +46,37 @@ interface RoleOption {
   features: string[];
 }
 
+interface UserCreationResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    _id: string;
+    fullName: string;
+    healthStatus: string;
+    petraPublicKey: string;
+    petraWalletAddress: string;
+    phoneNo: string;
+    role: string;
+    token: string;
+  };
+  timestamp: string;
+}
+
 const OnboardingFlow = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [userDetails, setUserDetails] = useState<UserDetails>({
     name: "",
-    email: "",
     phone: "",
+    password: "",
   });
   const [selectedRole, setSelectedRole] = useState<string>("");
-  const { connected } = useWallet();
+  const { connected, account } = useWallet();
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [apiResponse, setApiResponse] = useState<{
+    success?: boolean;
+    message?: string;
+    error?: string;
+  }>({});
 
   const roleOptions: RoleOption[] = [
     {
@@ -90,20 +114,100 @@ const OnboardingFlow = () => {
     }
   };
 
-  const handleWalletConnected = () => {
-    if (connected) {
-      setCurrentStep(3);
+  const handleWalletConnected = async () => {
+    console.log("Handling wallet connection...");
+    if (connected && account) {
+      console.log("Wallet connected:", account);
+      try {
+        console.log("Creating user with wallet details...");
+        setIsCreatingUser(true);
+        setApiResponse({});
+
+        // Prepare the user data for API
+        const userData = {
+          fullName: userDetails.name,
+          phoneNo: userDetails.phone,
+          petraWalletAddress: account.address?.toString(),
+          petraPublicKey: Array.isArray(account.publicKey)
+            ? account.publicKey.join(", ")
+            : account.publicKey?.toString() || "",
+          role: "user", // Default to user, will set specific role in next step
+          password: userDetails.password,
+        };
+
+        console.log("Creating user with data:", userData);
+
+        // Make API request
+        const response = await fetch("http://localhost:8080/api/user/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+
+        const data: UserCreationResponse = await response.json();
+
+        if (data.success) {
+          // Store token in localStorage
+          if (data.data?.token) {
+            localStorage.setItem("authToken", data.data.token);
+          }
+
+          setApiResponse({
+            success: true,
+            message: data.message || "User created successfully",
+          });
+
+          // Move to role selection after successful user creation
+          setTimeout(() => {
+            setCurrentStep(3);
+          }, 2000);
+        } else {
+          setApiResponse({
+            success: false,
+            error: data.message || "Failed to create user",
+          });
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        setApiResponse({
+          success: false,
+          error: "An error occurred while creating your account",
+        });
+      } finally {
+        setIsCreatingUser(false);
+      }
     }
   };
 
-  const handleRoleSelection = (roleId: string) => {
+  const handleRoleSelection = async (roleId: string) => {
     setSelectedRole(roleId);
-    // Here you would typically navigate to the respective dashboard
-    console.log(`Selected role: ${roleId}`, {
-      userDetails,
-      selectedRole: roleId,
-    });
-    alert(`Onboarding complete! Redirecting to ${roleId} dashboard...`);
+
+    try {
+      // Update user role if we have a token
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        await fetch("http://localhost:8080/api/user/update-role", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ role: roleId }),
+        });
+      }
+
+      // Here you would typically navigate to the respective dashboard
+      console.log(`Selected role: ${roleId}`, {
+        userDetails,
+        selectedRole: roleId,
+      });
+      alert(`Onboarding complete! Redirecting to ${roleId} dashboard...`);
+    } catch (error) {
+      console.error("Error updating role:", error);
+      alert("There was an issue updating your role. Please try again.");
+    }
   };
 
   const renderStepIndicator = () => (
@@ -173,25 +277,6 @@ const OnboardingFlow = () => {
             </div>
 
             <div>
-              <Label htmlFor="email" className="text-gray-300 font-medium">
-                Email Address <span className="text-gray-500">(Optional)</span>
-              </Label>
-              <div className="relative mt-2">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  value={userDetails.email}
-                  onChange={(e) =>
-                    setUserDetails({ ...userDetails, email: e.target.value })
-                  }
-                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
-                  placeholder="Enter your email address"
-                />
-              </div>
-            </div>
-
-            <div>
               <Label htmlFor="phone" className="text-gray-300 font-medium">
                 Phone Number *
               </Label>
@@ -207,6 +292,26 @@ const OnboardingFlow = () => {
                   }
                   className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
                   placeholder="Enter your phone number"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="password" className="text-gray-300 font-medium">
+                Password *
+              </Label>
+              <div className="relative mt-2">
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={userDetails.password}
+                  onChange={(e) =>
+                    setUserDetails({ ...userDetails, password: e.target.value })
+                  }
+                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                  placeholder="Enter your password"
                 />
               </div>
             </div>
@@ -243,6 +348,22 @@ const OnboardingFlow = () => {
         <Card className="bg-black/40 backdrop-blur-xl border-white/10">
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
+              {apiResponse.success === true && (
+                <Alert className="bg-green-500/10 border-green-500/30 text-green-400">
+                  <Check className="h-4 w-4 mr-2" />
+                  <AlertTitle>Success!</AlertTitle>
+                  <AlertDescription>{apiResponse.message}</AlertDescription>
+                </Alert>
+              )}
+
+              {apiResponse.success === false && (
+                <Alert className="bg-red-500/10 border-red-500/30 text-red-400">
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>{apiResponse.error}</AlertDescription>
+                </Alert>
+              )}
+
               <div className="flex items-center justify-center space-x-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
                 <Zap className="w-5 h-5 text-green-400" />
                 <span className="text-green-400 font-medium">
@@ -252,10 +373,20 @@ const OnboardingFlow = () => {
 
               <Button
                 onClick={handleWalletConnected}
-                className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02]"
+                disabled={isCreatingUser}
+                className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50"
               >
-                Continue to Role Selection
-                <ChevronRight className="w-5 h-5 ml-2" />
+                {isCreatingUser ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Creating Account...
+                  </>
+                ) : (
+                  <>
+                    Continue to Role Selection
+                    <ChevronRight className="w-5 h-5 ml-2" />
+                  </>
+                )}
               </Button>
             </div>
           </CardContent>
@@ -265,7 +396,7 @@ const OnboardingFlow = () => {
   );
 
   const renderRoleSelection = () => (
-    <Card className="bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+    <Card className="w-full bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
       <CardHeader className="text-center space-y-4">
         <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center">
           <UserCheck className="w-8 h-8 text-white" />
