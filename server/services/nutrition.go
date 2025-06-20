@@ -276,23 +276,19 @@ func (s *NutritionAnalysisService) StreamNutritionAnalysisWithPreferences(
 	product *utils.ExtractedNutritionData,
 	userPrefs *models.UserPreferences,
 ) error {
-	// Read prompt template
 	promptTemplate, err := s.readPromptTemplate()
 	if err != nil {
 		return fmt.Errorf("failed to read prompt template: %v", err)
 	}
 
-	// Create streaming prompt
 	prompt := s.createStreamingPrompt(product, userPrefs, promptTemplate)
 
-	// Send initial streaming message
 	initialMsg := map[string]interface{}{
 		"type":    "stream_start",
 		"content": "Starting AI analysis...",
 	}
 	conn.WriteJSON(initialMsg)
 
-	// Create streaming request to Gemini
 	stream := s.client.Models.GenerateContentStream(
 		context.Background(),
 		lib.GEMINI_MODEL,
@@ -300,7 +296,6 @@ func (s *NutritionAnalysisService) StreamNutritionAnalysisWithPreferences(
 		nil,
 	)
 
-	// Process streaming response
 	var fullResponse strings.Builder
 	var currentSection strings.Builder
 	var sectionType string
@@ -314,14 +309,12 @@ func (s *NutritionAnalysisService) StreamNutritionAnalysisWithPreferences(
 		fullResponse.WriteString(text)
 		currentSection.WriteString(text)
 
-		// Send chunk to client
 		chunkMsg := map[string]interface{}{
 			"type":    "stream_chunk",
 			"content": text,
 		}
 		conn.WriteJSON(chunkMsg)
 
-		// Check for section boundaries and send formatted sections
 		sectionType, currentSection = s.processStreamingSection(
 			conn, 
 			currentSection.String(), 
@@ -329,7 +322,6 @@ func (s *NutritionAnalysisService) StreamNutritionAnalysisWithPreferences(
 		)
 	}
 
-	// Send final formatted analysis
 	finalAnalysis := s.formatStreamingResponse(fullResponse.String(), product, userPrefs)
 	finalMsg := map[string]interface{}{
 		"type":    "stream_complete",

@@ -13,4 +13,7 @@ type User struct {
 	PetraPublicKey     string             `json:"petraPublicKey" bson:"petraPublicKey"`
 	HealthStatus       string             `json:"healthStatus" bson:"healthStatus"`
 	Role               string             `json:"role" bson:"role" binding:"required,oneof=admin vendor user"`
+	HealthGoals        []string  `json:"healthGoals" bson:"healthGoals"`
+	DietaryPreferences []string  `json:"dietaryPreferences" bson:"dietaryPreferences"`
+	NutritionPriorities []string  `json:"nutritionPriorities" bson:"nutritionPriorities"`
 }

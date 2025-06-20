@@ -49,7 +49,26 @@ export function NutritionStreaming({
     const wsRef = useRef<WebSocket | null>(null);
 
     const connectWebSocket = () => {
-        const ws = new WebSocket("ws://localhost:8080/ws/nutrition/stream");
+        // Get the authentication token
+
+        const hardCodedToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA1NDY5NzIsImZ1bGxOYW1lIjoiSm9obiBEb2UiLCJwZXRyYVB1YmxpY0tleSI6IjB4YWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MCIsInBldHJhV2FsbGV0QWRkcmVzcyI6IjB4MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZiIsInBob25lTm8iOiIxMjM0NTY3ODIwIiwicm9sZSI6InVzZXIiLCJ1c2VySWQiOiI2ODU1ZGYxNzg4ZWNlZmM1MmI2YzcyZTIifQ.qlo7-O0P89NDBrCn6dax-IxiKHZ7tEQ50M0EqGtZNDE`;
+
+        const token =
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken") ||
+            hardCodedToken;
+
+        if (!token) {
+            console.error("No authentication token found");
+            alert("Please login to use the nutrition streaming feature");
+            return;
+        }
+
+        // Add token as query parameter
+        const wsUrl = `ws://localhost:8080/ws/nutrition/stream?token=${encodeURIComponent(
+            token
+        )}`;
+        const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
             setIsConnected(true);

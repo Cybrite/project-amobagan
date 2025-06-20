@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -100,7 +101,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	token, err := utils.GenerateJWT(user)
 
 	userData := map[string]interface{}{
-		"_id": result.InsertedID,
+		"_id": result.InsertedID.(primitive.ObjectID).Hex(),
 		"token": token,
 		"fullName": user.FullName,
 		"phoneNo": user.PhoneNo,

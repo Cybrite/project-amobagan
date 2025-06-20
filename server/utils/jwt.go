@@ -5,10 +5,12 @@ import (
 	"amobagan/models"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 var cfg = config.LoadConfig()
+
 func GenerateJWT(user models.User) (string, error) {
 	claims := jwt.MapClaims{
 		"userId": user.ID.Hex(),
@@ -47,4 +49,25 @@ func GetUserIDFromToken(token string) (string, error) {
 	}
 	
 	return userID, nil
+}
+
+// VerifyTokenFromQuery extracts and verifies a token from query parameters
+// Returns the claims, user ID, and any error
+func VerifyTokenFromQuery(c *gin.Context) (jwt.MapClaims, string, error) {
+	token := c.Query("token")
+	if token == "" {
+		return nil, "", jwt.ErrSignatureInvalid
+	}
+
+	claims, err := VerifyJWT(token)
+	if err != nil {
+		return nil, "", err
+	}
+
+	userID, ok := claims["userId"].(string)
+	if !ok {
+		return nil, "", jwt.ErrSignatureInvalid
+	}
+
+	return claims, userID, nil
 }
