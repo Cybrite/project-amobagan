@@ -23,14 +23,11 @@ const UserDetailsStep = ({
   setUserDetails,
   onSubmit,
 }: UserDetailsStepProps) => (
-  <Card className="bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+  <Card className="bg-[#F0EDE4;]">
     <CardHeader className="text-center space-y-4">
-      <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center">
-        <User className="w-8 h-8 text-white" />
-      </div>
       <div>
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-          Welcome to Aptos Marketplace
+        <CardTitle className="text-2xl font-bold bg-[#000] bg-clip-text text-transparent">
+          Fill your Details
         </CardTitle>
         <CardDescription className="text-gray-400 mt-2">
           Let&apos;s get started by collecting some basic information
