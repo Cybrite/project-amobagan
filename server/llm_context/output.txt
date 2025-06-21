@@ -97,6 +97,33 @@ OUTPUT TEMPLATE STRUCTURE
                     </div>
                 </div>
 
+                <div class="reasons-section">
+                    <div class="reasons-title">
+                        What happens when I eat this regularly?
+                    </div>
+
+                    <div class="reason-item">
+                        <span class="reason-icon">❌[APPROPIRATE ICON]</span>
+                        <div class="reason-text">
+                            <strong>High in Saturated Fat And Calories</strong>,
+                            Conflicting With Weight Loss Goals.[APPROPIRATE REASON]
+                        </div>
+                    </div>
+
+                    <div class="reasons-title">
+                       How long will it take me to achieve my health goal?
+                    </div>
+
+                    <div class="reason-item">
+                        <span class="reason-icon">❌[APPROPIRATE ICON]</span>
+                        <div class="reason-text">
+                            <strong>Due to [SPECIFIC REASONS]</strong>,
+                           it mught happen that your health goals might get delayed a bit or might happen that you might not also achieve your goals[APPROPIRATE REASON]
+                        </div>
+                    </div>
+                    
+                </div>
+
                 <div class="nutrition-facts">
                     <div class="nutrition-header">Nutrition Facts</div>
 

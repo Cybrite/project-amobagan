@@ -4,15 +4,10 @@ import React, {
   useState,
 } from 'react';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 
 interface StreamMessage {
     type: string;
@@ -23,16 +18,34 @@ interface StreamMessage {
 
 interface NutritionStreamingProps {
     onAnalysisComplete?: (analysis: string) => void;
+    initialBarcode?: string;
 }
 
 export function NutritionStreaming({
     onAnalysisComplete,
+    initialBarcode,
 }: NutritionStreamingProps) {
-    const [barcode, setBarcode] = useState("");
+    const [barcode, setBarcode] = useState(initialBarcode || "");
     const [isConnected, setIsConnected] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [currentAnalysis, setCurrentAnalysis] = useState("");
     const wsRef = useRef<WebSocket | null>(null);
+
+    useEffect(() => {
+        if (initialBarcode) {
+            setBarcode(initialBarcode);
+        }
+    }, [initialBarcode]);
+
+    useEffect(() => {
+        if (initialBarcode && isConnected && !isStreaming && barcode.trim()) {
+            const timer = setTimeout(() => {
+                startAnalysis();
+            }, 500);
+
+            return () => clearTimeout(timer);
+        }
+    }, [initialBarcode, isConnected]);
 
     const connectWebSocket = () => {
         const token =
@@ -117,13 +130,9 @@ export function NutritionStreaming({
     }, []);
 
     return (
-        <div className="max-w-4xl mx-auto p-6 space-y-6 font-inter">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Nutrition Analysis Streaming</CardTitle>
-                </CardHeader>
+        <div className="w-full mx-auto space-y-6 font-inter">
+            {/* <Card>
                 <CardContent className="space-y-4">
-                    {/* Connection Status */}
                     <div className="flex items-center gap-2">
                         <Badge
                             variant={isConnected ? "default" : "destructive"}
@@ -135,18 +144,26 @@ export function NutritionStreaming({
                         )}
                     </div>
 
-                    {/* Input Section */}
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium mb-2">
-                                Barcode
+                                Barcode{" "}
+                                {initialBarcode && <span className="text-blue-600">(from scan)</span>}
                             </label>
                             <Input
                                 value={barcode}
                                 onChange={(e) => setBarcode(e.target.value)}
                                 placeholder="Enter product barcode"
                                 disabled={isStreaming}
+                                className={initialBarcode ? "border-blue-300 bg-blue-50" : ""}
                             />
+                            Commented out for automatic mode - might need later
+                            {initialBarcode && (
+                                <p className="text-xs text-blue-600 mt-1">
+                                    Barcode automatically loaded from scan
+                                </p>
+                            )}
+                           
                         </div>
 
                         <Button
@@ -160,7 +177,7 @@ export function NutritionStreaming({
                         </Button>
                     </div>
                 </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Analysis Output */}
             {currentAnalysis && (
