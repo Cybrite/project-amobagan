@@ -3,6 +3,7 @@ package controllers
 import (
 	"amobagan/lib"
 	"amobagan/models"
+	"amobagan/services"
 	"amobagan/utils"
 	"context"
 	"errors"
@@ -168,4 +169,63 @@ func (u *UserController) LoginUser(c *gin.Context) {
 	}
 
 	utils.OK(c, "User logged in successfully", userData)
+}
+
+func (u *UserController) UpdateNutritionalStatus(c *gin.Context) {
+	userID := c.GetString("userID")
+	if userID == "" {
+		utils.BadRequest(c, "User not authenticated", nil)
+		return
+	}
+	
+	var request models.NutritionalUpdateRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		utils.BadRequest(c, "Invalid request body", err.Error())
+		return
+	}
+	
+	// Validate that nutritional elements are provided
+	if len(request.NutritionalElements) == 0 {
+		utils.BadRequest(c, "Nutritional elements are required", nil)
+		return
+	}
+	
+	// Update the nutritional status
+	err := services.UpdateNutritionalStatus(userID, request.NutritionalElements)
+	if err != nil {
+		utils.InternalServerError(c, "Failed to update nutritional status", err.Error())
+		return
+	}
+	
+	// Get updated user data
+	user, err := services.GetUserByID(userID)
+	if err != nil {
+		utils.InternalServerError(c, "Failed to get updated user data", err.Error())
+		return
+	}
+	
+	response := map[string]interface{}{
+		"message": "Nutritional status updated successfully",
+		"nutritionalElements": request.NutritionalElements,
+		"updatedNutritionalStatus": user.NutritionalStatus,
+	}
+	
+	utils.OK(c, "Nutritional status updated successfully", response)
+}
+
+func (u *UserController) GetNutritionDetails(c *gin.Context) {
+	userID := c.GetString("userID")
+	if userID == "" {
+		utils.BadRequest(c, "User not authenticated", nil)
+		return
+	}
+	
+	// Get user nutrition details with feedback
+	nutritionDetails, err := services.GetUserNutritionDetails(userID)
+	if err != nil {
+		utils.InternalServerError(c, "Failed to get nutrition details", err.Error())
+		return
+	}
+	
+	utils.OK(c, "Nutrition details retrieved successfully", nutritionDetails)
 }
