@@ -56,9 +56,10 @@ const OnboardingFlow = () => {
   } = useOnboardingHandlers({
     userDetails,
     setCurrentStep,
-    account: account
-      ? { address: account.toString(), publicKey: account.publicKey.toString() }
-      : { address: undefined, publicKey: undefined },
+    account: {
+      address: account ? account.toString() : "",
+      publicKey: account ? account.publicKey.toString() : "",
+    },
     connected,
     setIsCreatingUser,
     setApiResponse,
