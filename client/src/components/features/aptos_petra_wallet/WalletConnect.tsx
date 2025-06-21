@@ -58,13 +58,13 @@ const WalletConnect = () => {
   };
 
   return (
-    <Card className="w-full bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+    <Card className="w-full bg-[#F0EDE4]">
       <CardHeader className="text-center space-y-4">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center">
+        <div className="mx-auto w-16 h-16 bg-[#004743] rounded-2xl flex items-center justify-center">
           <Wallet className="w-8 h-8 text-white" />
         </div>
         <div>
-          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-bold bg-[#003] bg-clip-text text-transparent">
             Aptos Wallet
           </CardTitle>
           <CardDescription className="text-gray-400 mt-2">
@@ -87,24 +87,24 @@ const WalletConnect = () => {
             <Card className="bg-white/5 border-white/10">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg text-white flex items-center space-x-2">
-                  <Zap className="w-5 h-5 text-purple-400" />
-                  <span>Account Details</span>
+                  <Zap className="w-5 h-5 text-[#004743]" />
+                  <span className="text-black">Account Details</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-400">
+                  <label className="text-sm font-medium text-gray-800">
                     Address
                   </label>
                   <div className="flex items-center space-x-2 mt-1">
-                    <code className="flex-1 text-xs bg-black/30 p-2 rounded border border-white/10 text-gray-300 break-all">
+                    <code className="flex-1 text-xs bg-[#FFFDF7] p-2 rounded border border-white/10 text-[black] break-all">
                       {account?.address?.toString()}
                     </code>
                     <Button
                       size="sm"
                       variant="ghost"
                       onClick={copyAddress}
-                      className="text-gray-400 hover:text-white"
+                      className="text-black hover:text-white"
                     >
                       {copiedAddress ? (
                         <Check className="w-4 h-4 text-green-400" />
@@ -119,10 +119,10 @@ const WalletConnect = () => {
                   <>
                     <Separator className="bg-white/10" />
                     <div>
-                      <label className="text-sm font-medium text-gray-400">
+                      <label className="text-sm font-medium text-gray-800">
                         Public Key
                       </label>
-                      <code className="block text-xs bg-black/30 p-2 rounded border border-white/10 text-gray-300 break-all mt-1">
+                      <code className="block text-xs bg-[#FFFDF7] p-2 rounded border border-white/10 text-black break-all mt-1">
                         {Array.isArray(account.publicKey)
                           ? account.publicKey.join(", ")
                           : account.publicKey?.toString() ||
@@ -157,13 +157,13 @@ const WalletConnect = () => {
         ) : (
           <div className="space-y-6">
             {/* Not Connected Status */}
-            <div className="flex items-center justify-center space-x-2 p-3 bg-gray-500/10 border border-gray-500/20 rounded-lg">
-              <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-              <span className="text-gray-400 font-medium">Not Connected</span>
+            <div className="flex items-center justify-center space-x-2 p-3 bg-[#FFFDF7]  border border-gray-500/20 rounded-lg">
+              <div className="w-2 h-2 bg-gray-800 rounded-full"></div>
+              <span className="text-gray-800 font-medium">Not Connected</span>
             </div>
 
             <div className="text-center space-y-4">
-              <p className="text-gray-400 text-sm">
+              <p className="text-black text-sm">
                 Connect your Petra wallet to access decentralized applications
                 on Aptos
               </p>
@@ -171,28 +171,28 @@ const WalletConnect = () => {
               <Button
                 onClick={handleConnect}
                 disabled={isConnecting || isLoading}
-                className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none disabled:opacity-50"
+                className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none disabled:opacity-50"
               >
                 {isConnecting || isLoading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin text-black rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                     Connecting...
                   </>
                 ) : (
                   <>
-                    <Wallet className="w-5 h-5 mr-2" />
+                    <Wallet className="w-5 h-5 mr-2 text-black" />
                     Connect Petra Wallet
                   </>
                 )}
               </Button>
 
               <div className="flex items-center justify-center space-x-2 text-sm">
-                <span className="text-gray-500">Don&apos;t have Petra?</span>
+                <span className="text-black">Don&apos;t have Petra?</span>
                 <a
                   href="https://petra.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-purple-400 hover:text-purple-300 inline-flex items-center space-x-1 transition-colors"
+                  className="text-[#004743] hover:text-green-800 inline-flex items-center space-x-1 transition-colors"
                 >
                   <span>Download</span>
                   <ExternalLink className="w-3 h-3" />

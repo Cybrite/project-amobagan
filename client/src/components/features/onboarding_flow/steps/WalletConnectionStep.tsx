@@ -28,7 +28,7 @@ const WalletConnectionStep = ({
       <Button
         variant="ghost"
         onClick={onBack}
-        className="text-gray-400 hover:text-white mb-4"
+        className="text-black hover:text-gray-700 ease-in mb-4"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Details
@@ -38,7 +38,7 @@ const WalletConnectionStep = ({
     <WalletConnect />
 
     {connected && (
-      <Card className="bg-black/40 backdrop-blur-xl border-white/10">
+      <Card className="bg-[##F0EDE4] backdrop-blur-xl border-white/10">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
             {apiResponse.success === true && (
@@ -67,7 +67,7 @@ const WalletConnectionStep = ({
             <Button
               onClick={onContinue}
               disabled={isCreatingUser}
-              className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50"
+              className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50"
             >
               {isCreatingUser ? (
                 <>
