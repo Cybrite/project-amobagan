@@ -1,16 +1,14 @@
-import React from "react";
-import { ArrowLeft, ChevronRight, Apple } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
+  ArrowLeft,
+  ChevronRight,
+  Heart,
+  UtensilsCrossed,
+  AlarmClock,
+  Check,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface UserPreferencesStepProps {
   preferences: {
@@ -35,6 +33,9 @@ const UserPreferencesStep = ({
   onBack,
   isSubmitting = false,
 }: UserPreferencesStepProps) => {
+  // Add state to track which step of the preferences form we're on
+  const [preferencesStep, setPreferencesStep] = useState<1 | 2 | 3>(1);
+
   const healthGoalsOptions = [
     { id: "weight_loss", label: "Weight Loss" },
     { id: "muscle_gain", label: "Muscle Gain" },
@@ -105,140 +106,220 @@ const UserPreferencesStep = ({
     });
   };
 
+  // Progress indicator component
+  const StepIndicator = () => (
+    <div className="flex justify-center space-x-2 mb-4">
+      {[1, 2, 3].map((step) => (
+        <div
+          key={step}
+          className={`w-2 h-2 rounded-full ${
+            step === preferencesStep
+              ? "bg-[#004743]"
+              : step < preferencesStep
+              ? "bg-green-500"
+              : "bg-gray-300"
+          }`}
+        />
+      ))}
+    </div>
+  );
+
+  // Handle form step navigation
+  const handleNext = () => {
+    if (preferencesStep === 1) setPreferencesStep(2);
+    else if (preferencesStep === 2) setPreferencesStep(3);
+  };
+
+  const handlePrevious = () => {
+    if (preferencesStep === 3) setPreferencesStep(2);
+    else if (preferencesStep === 2) setPreferencesStep(1);
+    else onBack();
+  };
+
+  const handleSubmitForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(e);
+  };
+
+  // Step-specific icon and title
+  const getStepIcon = () => {
+    switch (preferencesStep) {
+      case 1:
+        return <Heart className="w-6 h-6 text-[#004743]" />;
+      case 2:
+        return <UtensilsCrossed className="w-6 h-6 text-[#004743]" />;
+      case 3:
+        return <AlarmClock className="w-6 h-6 text-[#004743]" />;
+    }
+  };
+
+  const getStepTitle = () => {
+    switch (preferencesStep) {
+      case 1:
+        return "Your Health Goals";
+      case 2:
+        return "Your Dietary Preferences";
+      case 3:
+        return "Your Food Allergies";
+    }
+  };
+
+  // Custom checkbox option component
+  const CheckboxOption = ({
+    label,
+    isSelected,
+    onClick,
+  }: {
+    id: string;
+    label: string;
+    isSelected: boolean;
+    onClick: () => void;
+  }) => (
+    <div
+      onClick={onClick}
+      className={`flex items-center gap-3 p-5 mb-2 border-2 cursor-pointer transition-all ${
+        isSelected
+          ? "bg-white border-black"
+          : "bg-inherit hover:bg-gray-50 border-black"
+      }`}
+    >
+      <div
+        className={`w-6 h-6 rounded flex items-center justify-center ${
+          isSelected ? "bg-[#004743]" : " border-black border-2"
+        }`}
+      >
+        {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+      </div>
+      <span className="text-lg tracking-wide">{label}</span>
+    </div>
+  );
+
   return (
-    <Card className="w-full bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+    <Card className="bg-transparent w-full">
       <CardHeader className="text-center space-y-4">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center">
-          <Apple className="w-8 h-8 text-white" />
-        </div>
-        <div>
-          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Your Nutrition Preferences
+        <div className="flex items-center justify-center gap-2">
+          {getStepIcon()}
+          <CardTitle className="text-2xl flex font-bold bg-[#000] bg-clip-text text-transparent">
+            {getStepTitle()}
           </CardTitle>
-          <CardDescription className="text-gray-400 mt-2">
-            Help us personalize your nutrition recommendations
-          </CardDescription>
         </div>
+        <StepIndicator />
       </CardHeader>
 
       <CardContent>
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <Button
             variant="ghost"
-            onClick={onBack}
-            className="text-gray-400 hover:text-white"
+            onClick={handlePrevious}
+            className="text-gray-600 text-md hover:border-black border-2 hover:text-black hover:bg-gray-100"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
+            {preferencesStep === 1 ? "Back" : "Previous"}
           </Button>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-6">
-          <ScrollArea className="h-[440px] pr-4">
-            <div className="space-y-6">
-              {/* Health Goals */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-white">
-                  What are your health goals?
-                </h3>
-                <p className="text-sm text-gray-400">
-                  Select all that apply to you
-                </p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {healthGoalsOptions.map((option) => (
-                    <Badge
-                      key={option.id}
-                      variant="outline"
-                      className={`cursor-pointer py-2 px-3 text-sm ${
-                        preferences.healthGoals.includes(option.id)
-                          ? "bg-blue-500/20 border-blue-500/50 text-blue-300"
-                          : "bg-white/5 hover:bg-white/10"
-                      }`}
-                      onClick={() => toggleSelection("healthGoals", option.id)}
-                    >
-                      {option.label}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <Separator className="bg-white/10" />
-
-              {/* Dietary Preferences */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-white">
-                  Do you follow any specific diet?
-                </h3>
-                <p className="text-sm text-gray-400">
-                  Select all diets you follow
-                </p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {dietaryPreferencesOptions.map((option) => (
-                    <Badge
-                      key={option.id}
-                      variant="outline"
-                      className={`cursor-pointer py-2 px-3 text-sm ${
-                        preferences.dietaryPreferences.includes(option.id)
-                          ? "bg-green-500/20 border-green-500/50 text-green-300"
-                          : "bg-white/5 hover:bg-white/10"
-                      }`}
-                      onClick={() =>
-                        toggleSelection("dietaryPreferences", option.id)
-                      }
-                    >
-                      {option.label}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <Separator className="bg-white/10" />
-
-              {/* Allergies */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-white">
-                  Any food allergies we should know about?
-                </h3>
-                <p className="text-sm text-gray-400">
-                  We&apos;ll help you avoid these ingredients
-                </p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {allergiesOptions.map((option) => (
-                    <Badge
-                      key={option.id}
-                      variant="outline"
-                      className={`cursor-pointer py-2 px-3 text-sm ${
-                        preferences.allergies.includes(option.id)
-                          ? "bg-red-500/20 border-red-500/50 text-red-300"
-                          : "bg-white/5 hover:bg-white/10"
-                      }`}
-                      onClick={() => toggleSelection("allergies", option.id)}
-                    >
-                      {option.label}
-                    </Badge>
-                  ))}
-                </div>
+        <form onSubmit={handleSubmitForm} className="space-y-6">
+          {/* Form Step 1: Health Goals */}
+          {preferencesStep === 1 && (
+            <div className="space-y-4">
+              <h3 className="font-medium text-black">
+                What are your health goals?
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Select all that apply to you
+              </p>
+              <div className="space-y-1">
+                {healthGoalsOptions.map((option) => (
+                  <CheckboxOption
+                    key={option.id}
+                    id={option.id}
+                    label={option.label}
+                    isSelected={preferences.healthGoals.includes(option.id)}
+                    onClick={() => toggleSelection("healthGoals", option.id)}
+                  />
+                ))}
               </div>
             </div>
-          </ScrollArea>
+          )}
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02]"
-          >
-            {isSubmitting ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                Saving Preferences...
-              </>
-            ) : (
-              <>
-                Continue to Nutrition Dashboard
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </>
-            )}
-          </Button>
+          {/* Form Step 2: Dietary Preferences */}
+          {preferencesStep === 2 && (
+            <div className="space-y-4">
+              <h3 className="font-semibold text-2xl text-black">
+                Do you follow any specific diet?
+              </h3>
+              <p className="text-md text-gray-600 mb-4">
+                Select all diets you follow
+              </p>
+              <div className="space-y-5">
+                {dietaryPreferencesOptions.map((option) => (
+                  <CheckboxOption
+                    key={option.id}
+                    id={option.id}
+                    label={option.label}
+                    isSelected={preferences.dietaryPreferences.includes(
+                      option.id
+                    )}
+                    onClick={() =>
+                      toggleSelection("dietaryPreferences", option.id)
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Form Step 3: Allergies */}
+          {preferencesStep === 3 && (
+            <div className="space-y-4">
+              <h3 className="font-medium text-black">
+                Any food allergies we should know about?
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                We&apos;ll help you avoid these ingredients
+              </p>
+              <div className="space-y-1">
+                {allergiesOptions.map((option) => (
+                  <CheckboxOption
+                    key={option.id}
+                    id={option.id}
+                    label={option.label}
+                    isSelected={preferences.allergies.includes(option.id)}
+                    onClick={() => toggleSelection("allergies", option.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preferencesStep !== 3 ? (
+            <Button
+              type="button"
+              onClick={handleNext}
+              className="w-full bg-[#004743] text-white font-medium py-6 transition-all duration-300 transform text-xl hover:scale-[1.02] mt-6"
+            >
+              Continue
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] mt-6"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Saving Preferences...
+                </>
+              ) : (
+                <>
+                  Continue to Nutrition Dashboard
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </>
+              )}
+            </Button>
+          )}
         </form>
       </CardContent>
     </Card>
