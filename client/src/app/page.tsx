@@ -8,7 +8,7 @@ export default function LandingPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push("/welcome");
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [router]);

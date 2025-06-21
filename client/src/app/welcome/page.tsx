@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function WelcomePage() {
   const router = useRouter();
@@ -14,35 +15,101 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
+    <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      <div className="absolute top-8 right-8 animate-fade-in-delayed">
+        <div className="w-12 h-12 rounded-full bg-gray-300 border-2 border-white shadow-sm overflow-hidden">
+          <Image
+            src="/placeholder.svg"
+            alt="Profile"
+            width={48}
+            height={48}
+            className="object-cover"
+          />
+        </div>
+      </div>
 
-      <div className="relative w-full max-w-md text-center space-y-8">
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4">Welcome to NutriScan</h1>
-          <p className="text-lg text-gray-600">
-            Your personal nutrition assistant that helps you make better food
-            choices
+      <div className="w-full max-w-sm space-y-16">
+        {/* Header Section */}
+        <div className="text-center space-y-8 animate-fade-in-up">
+          <div className="space-y-4">
+            <h2 className="text-3xl text-gray-700 font-normal">Welcome to</h2>
+            <h1 className="text-5xl font-bold text-black">NutriScan</h1>
+          </div>
+          <p className="text-gray-600 text-lg leading-relaxed px-2">
+            A Community driven initiative to let you make better food choices
           </p>
         </div>
 
-        <div className="space-y-4">
+        {/* Cards Section */}
+        <div className="grid grid-cols-2 gap-4 h-64 animate-fade-in-up-delayed">
+          {/* Large card on the left */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm"></div>
+
+          {/* Two stacked cards on the right */}
+          <div className="space-y-4">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-[120px]"></div>
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-[120px]"></div>
+          </div>
+        </div>
+
+        {/* Buttons Section */}
+        <div className="space-y-8 animate-fade-in-up-more-delayed">
           <Button
             onClick={handleGetStarted}
-            className="w-full bg-[#004743] text-white font-medium py-6 text-xl transition-all duration-300 transform hover:scale-[1.02]"
+            className="w-full bg-[#004743] hover:bg-[#003a37] text-white font-medium py-6 text-xl rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-sm"
           >
             Get Started
           </Button>
 
-          <Button
+          <button
             onClick={handleLogin}
-            variant="outline"
-            className="w-full py-6 text-xl border-2 border-[#004743] text-[#004743] bg-transparent hover:bg-[#004743]/5"
+            className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium transition-colors duration-200"
           >
-            Login
-          </Button>
+            Already Have an account? Login
+          </button>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in-up-delayed {
+          opacity: 0;
+          animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .animate-fade-in-up-more-delayed {
+          opacity: 0;
+          animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .animate-fade-in-delayed {
+          opacity: 0;
+          animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+      `}</style>
     </div>
   );
 }
