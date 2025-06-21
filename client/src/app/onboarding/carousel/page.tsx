@@ -30,55 +30,6 @@ const carouselItems = [
   },
 ];
 
-// Animation variants
-const pageVariants = {
-  initial: { opacity: 0, y: 50 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -50 },
-};
-
-const cardVariants = {
-  initial: { scale: 0.8, opacity: 0 },
-  animate: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-      delay: 0.2,
-    },
-  },
-};
-
-const progressBarVariants = {
-  initial: { scaleX: 0 },
-  animate: { scaleX: 1 },
-};
-
-const imageVariants = {
-  initial: { scale: 0, rotate: -180 },
-  animate: {
-    scale: 1,
-    rotate: 0,
-    transition: {
-      type: "spring",
-      stiffness: 200,
-      damping: 20,
-      delay: 0.1,
-    },
-  },
-};
-
-const textVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { delay: 0.3 },
-  },
-};
-
 export default function CarouselPage() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -144,7 +95,8 @@ export default function CarouselPage() {
                               className="absolute inset-0 bg-[#004743]/10 rounded-full"
                               animate={{ scale: [1, 1.1, 1] }}
                               transition={{ duration: 2, repeat: Infinity }}
-                            />                            <Image
+                            />{" "}
+                            <Image
                               src={item.image}
                               alt={item.title}
                               width={280}

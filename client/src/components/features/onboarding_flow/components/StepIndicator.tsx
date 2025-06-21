@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface StepIndicatorProps {
   currentStep: number;
   totalSteps: number;
@@ -56,9 +58,11 @@ const StepIndicator = ({
               left: `${progressPercentage}%`,
             }}
           >
-            <img
+            <Image
               src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750475065/Vector_ug5wsz.png"
               alt="Progress indicator"
+              width={24}
+              height={24}
               className="w-6 h-6"
             />
           </div>

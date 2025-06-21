@@ -164,17 +164,7 @@ OUTPUT TEMPLATE STRUCTURE
                 </div>
 
                 <div id="transcript_summary">
-                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST IN
-                    HINDI]
-                </div>
-
-                <div id="nutritionalInfos" style="display: none">
-                    [ LIST ANY NUTRITIONAL ELEMENTS THAT CONFLICT WITH USER'S
-                    PRIORITIES. ONLY INCLUDE ELEMENTS THAT ARE MISSING OR
-                    INSUFFICIENT. EXAMPLE: If user priorities are "Protein,
-                    Fiber, Vitamins" and product lacks fiber, list only "Fiber".
-                    ONLY NAME NO DESCRIPTION THE FORMAT IS THIS
-                    element1,element2 AS TEXT ]
+                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST IN HINDI]
                 </div>
             </div>
         </div>

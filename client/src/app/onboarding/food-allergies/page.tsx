@@ -38,6 +38,25 @@ export default function FoodAllergiesPage() {
     router.push("/onboarding/dietary-preferences");
   };
 
+  // Add a skip function near your other handler functions
+  const handleSkip = () => {
+    // Store empty array for allergies when skipped
+    const userPreferences = JSON.parse(
+      sessionStorage.getItem("userPreferences") || "{}"
+    );
+
+    sessionStorage.setItem(
+      "userPreferences",
+      JSON.stringify({
+        ...userPreferences,
+        foodAllergies: [], // Save empty array to indicate no allergies
+      })
+    );
+
+    // Proceed to next step
+    router.push("/onboarding/nutrition-priorities");
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
@@ -123,18 +142,26 @@ export default function FoodAllergiesPage() {
               </div>
 
               <motion.div
+                className="flex space-x-4 w-full"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
+                <Button
+                  type="button"
+                  onClick={handleSkip}
+                  variant="outline"
+                  className="flex-1 border-[#004743] text-[#004743] hover:bg-[#004743]/10 py-6 text-lg rounded-lg transition-all duration-300"
+                >
+                  Skip
+                </Button>
+
                 <Button
                   type="submit"
                   disabled={
                     !allergyIngredients.trim() && !otherRestrictions.trim()
                   }
-                  className="w-full bg-[#004743] hover:bg-[#003a37] text-white font-medium py-6 text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="flex-1 bg-[#004743] hover:bg-[#003a37] text-white font-medium py-6 text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   Continue <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>

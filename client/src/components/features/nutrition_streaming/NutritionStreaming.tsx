@@ -1,147 +1,139 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
-import {
-  Card,
-  CardContent,
-} from '@/components/ui/card';
-import { WS_URL } from '@/lib/constants';
+import { Card, CardContent } from "@/components/ui/card";
+import { WS_URL } from "@/lib/constants";
 
 interface StreamMessage {
-    type: string;
-    content: string;
-    data?: Record<string, unknown>;
-    section?: string;
+  type: string;
+  content: string;
+  data?: Record<string, unknown>;
+  section?: string;
 }
 
 interface NutritionStreamingProps {
-    onAnalysisComplete?: (analysis: string) => void;
-    onStreamingStart?: () => void;
-    onFirstStreamChunk?: () => void;
-    initialBarcode?: string;
+  onAnalysisComplete?: (analysis: string) => void;
+  onStreamingStart?: () => void;
+  onFirstStreamChunk?: () => void;
+  initialBarcode?: string;
 }
 
 export function NutritionStreaming({
-    onAnalysisComplete,
-    onStreamingStart,
-    onFirstStreamChunk,
-    initialBarcode,
+  onAnalysisComplete,
+  onStreamingStart,
+  onFirstStreamChunk,
+  initialBarcode,
 }: NutritionStreamingProps) {
-    const [barcode, setBarcode] = useState(initialBarcode || "");
-    const [isConnected, setIsConnected] = useState(false);
-    const [isStreaming, setIsStreaming] = useState(false);
-    const [currentAnalysis, setCurrentAnalysis] = useState("");
-    const [hasReceivedFirstChunk, setHasReceivedFirstChunk] = useState(false);
-    const wsRef = useRef<WebSocket | null>(null);
+  const [barcode, setBarcode] = useState(initialBarcode || "");
+  const [isConnected, setIsConnected] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [currentAnalysis, setCurrentAnalysis] = useState("");
+  const [hasReceivedFirstChunk, setHasReceivedFirstChunk] = useState(false);
+  const wsRef = useRef<WebSocket | null>(null);
 
-    useEffect(() => {
-        if (initialBarcode) {
-            setBarcode(initialBarcode);
-        }
-    }, [initialBarcode]);
+  useEffect(() => {
+    if (initialBarcode) {
+      setBarcode(initialBarcode);
+    }
+  }, [initialBarcode]);
 
-    useEffect(() => {
-        if (initialBarcode && isConnected && !isStreaming && barcode.trim()) {
-            const timer = setTimeout(() => {
-                startAnalysis();
-            }, 500);
+  useEffect(() => {
+    if (initialBarcode && isConnected && !isStreaming && barcode.trim()) {
+      const timer = setTimeout(() => {
+        startAnalysis();
+      }, 500);
 
-            return () => clearTimeout(timer);
-        }
-    }, [initialBarcode, isConnected]);
+      return () => clearTimeout(timer);
+    }
+  }, [initialBarcode, isConnected]);
 
-    const connectWebSocket = () => {
-        const token =
-            localStorage.getItem("authToken") ||
-            sessionStorage.getItem("authToken");
+  const connectWebSocket = () => {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 
-        if (!token) {
-            console.error("No authentication token found");
-            alert("Please login to use the nutrition streaming feature");
-            return;
-        }
+    if (!token) {
+      console.error("No authentication token found");
+      alert("Please login to use the nutrition streaming feature");
+      return;
+    }
 
-        const wsUrl = `${WS_URL}/ws/nutrition/stream?token=${encodeURIComponent(
-            token
-        )}`;
-        const ws = new WebSocket(wsUrl);
+    const wsUrl = `${WS_URL}/ws/nutrition/stream?token=${encodeURIComponent(
+      token
+    )}`;
+    const ws = new WebSocket(wsUrl);
 
-        ws.onopen = () => {
-            setIsConnected(true);
-            console.log("WebSocket connected");
-        };
-
-        ws.onmessage = (event) => {
-            const message: StreamMessage = JSON.parse(event.data);
-            if (message.type === "stream_chunk") {
-                setCurrentAnalysis((prev) => prev + message.content);
-                if (!hasReceivedFirstChunk) {
-                    setHasReceivedFirstChunk(true);
-                    onFirstStreamChunk?.();
-                }
-            } else if (message.type === "stream_complete") {
-                setIsStreaming(false);
-                setCurrentAnalysis(message.content);
-                onAnalysisComplete?.(message.content);
-            } else if (message.type === "error") {
-                setIsStreaming(false);
-                console.error("Streaming error:", message.content);
-            }
-        };
-
-        ws.onclose = () => {
-            setIsConnected(false);
-            console.log("WebSocket disconnected");
-        };
-
-        ws.onerror = (error) => {
-            console.error("WebSocket error:", error);
-            setIsConnected(false);
-        };
-
-        wsRef.current = ws;
+    ws.onopen = () => {
+      setIsConnected(true);
+      console.log("WebSocket connected");
     };
 
-    const disconnectWebSocket = () => {
-        if (wsRef.current) {
-            wsRef.current.close();
-            wsRef.current = null;
+    ws.onmessage = (event) => {
+      const message: StreamMessage = JSON.parse(event.data);
+      if (message.type === "stream_chunk") {
+        setCurrentAnalysis((prev) => prev + message.content);
+        if (!hasReceivedFirstChunk) {
+          setHasReceivedFirstChunk(true);
+          onFirstStreamChunk?.();
         }
+      } else if (message.type === "stream_complete") {
+        setIsStreaming(false);
+        setCurrentAnalysis(message.content);
+        onAnalysisComplete?.(message.content);
+      } else if (message.type === "error") {
+        setIsStreaming(false);
+        console.error("Streaming error:", message.content);
+      }
     };
 
-    const startAnalysis = () => {
-        if (!wsRef.current || !isConnected) {
-            alert("WebSocket not connected");
-            return;
-        }
-
-        if (!barcode.trim()) {
-            alert("Please enter a barcode");
-            return;
-        }
-
-        setIsStreaming(true);
-        onStreamingStart?.();
-        setCurrentAnalysis("");
-
-        const request = {
-            barcode: barcode.trim(),
-        };
-
-        wsRef.current.send(JSON.stringify(request));
+    ws.onclose = () => {
+      setIsConnected(false);
+      console.log("WebSocket disconnected");
     };
 
-    useEffect(() => {
-        connectWebSocket();
-        return () => disconnectWebSocket();
-    }, []);
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setIsConnected(false);
+    };
 
-    return (
-        <div className="w-full mx-auto space-y-6 font-inter">
-            {/* <Card>
+    wsRef.current = ws;
+  };
+
+  const disconnectWebSocket = () => {
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+  };
+
+  const startAnalysis = () => {
+    if (!wsRef.current || !isConnected) {
+      alert("WebSocket not connected");
+      return;
+    }
+
+    if (!barcode.trim()) {
+      alert("Please enter a barcode");
+      return;
+    }
+
+    setIsStreaming(true);
+    onStreamingStart?.();
+    setCurrentAnalysis("");
+
+    const request = {
+      barcode: barcode.trim(),
+    };
+
+    wsRef.current.send(JSON.stringify(request));
+  };
+
+  useEffect(() => {
+    connectWebSocket();
+    return () => disconnectWebSocket();
+  }, []);
+
+  return (
+    <div className="w-full mx-auto space-y-6 font-inter">
+      {/* <Card>
                 <CardContent className="space-y-4">
                     <div className="flex items-center gap-2">
                         <Badge
@@ -189,17 +181,17 @@ export function NutritionStreaming({
                 </CardContent>
             </Card> */}
 
-            {/* Analysis Output */}
-            {currentAnalysis && (
-                <Card className="bg-[#f0ede4]">
-                    <CardContent>
-                        <div
-                            className="prose prose-sm w-full"
-                            dangerouslySetInnerHTML={{
-                                __html: currentAnalysis,
-                            }}
-                        >
-                            {/* <ReactMarkdown
+      {/* Analysis Output */}
+      {currentAnalysis && (
+        <Card className="bg-[#f0ede4]">
+          <CardContent>
+            <div
+              className="prose prose-sm w-full"
+              dangerouslySetInnerHTML={{
+                __html: currentAnalysis,
+              }}
+            >
+              {/* <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 // Remove rehypePlugins={[rehypeRaw]} - not needed anymore
                                 components={{
@@ -360,10 +352,10 @@ export function NutritionStreaming({
                             >
                                 {currentAnalysis}
                             </ReactMarkdown> */}
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
-        </div>
-    );
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
 }

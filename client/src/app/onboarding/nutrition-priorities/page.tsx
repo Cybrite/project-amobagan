@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StepIndicator from "@/components/features/onboarding_flow/components/StepIndicator";
 import { motion } from "framer-motion";
+import { SERVER_URL } from "@/lib/constants";
 
 const prioritiesOptions = [
   { id: "low_sugar", label: "Low Sugar" },
@@ -34,13 +35,14 @@ export default function NutritionPrioritiesPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Store nutrition priorities in session storage
     const userPreferences = JSON.parse(
       sessionStorage.getItem("userPreferences") || "{}"
     );
+
     sessionStorage.setItem(
       "userPreferences",
       JSON.stringify({
@@ -49,7 +51,95 @@ export default function NutritionPrioritiesPage() {
       })
     );
 
-    router.push("/onboarding/congratulations");
+    // Get all user data from session storage
+    const finalUserData = JSON.parse(
+      sessionStorage.getItem("userPreferences") || "{}"
+    );
+
+    // Get user details from sessionStorage
+    const userDetails = JSON.parse(
+      sessionStorage.getItem("userDetails") || "{}"
+    );
+
+    // Convert allergy ingredients from string to array if available
+    const foodAllergies = finalUserData.allergyIngredients
+      ? finalUserData.allergyIngredients
+          .split(",")
+          .map((item: string) => item.trim())
+          .filter(Boolean)
+      : [];
+
+    // Prepare the payload for the API - match the exact structure expected by the API
+    const payload = {
+      fullName: userDetails.name || "",
+      phoneNo: userDetails.phone || "",
+      password: userDetails.password || "",
+      healthStatus: "Healthy", // Default value
+      healthGoals: finalUserData.healthGoals || [],
+      dietaryPreferences: finalUserData.dietaryPreferences || [],
+      foodAllergies: foodAllergies,
+      nutritionPriorities: selectedPriorities.map((priority) => {
+        const label =
+          prioritiesOptions.find((option) => option.id === priority)?.label ||
+          "";
+        return label;
+      }),
+      workOutsPerWeek: finalUserData.workoutFrequency || "",
+      age: finalUserData.userInfo?.age || "",
+      height: finalUserData.userInfo?.height || "",
+      weight: finalUserData.userInfo?.weight || "",
+    };
+
+    console.log("Submitting payload:", payload); // For debugging
+
+    try {
+      // Make API call to create user
+      const response = await fetch(`${SERVER_URL}/api/user/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        // Try to get detailed error message
+        let errorMessage;
+        try {
+          const errorData = await response.json();
+          console.error("API error response:", errorData);
+          errorMessage = errorData.message || "Unknown error occurred";
+        } catch (e) {
+          console.error("Failed to parse error response:", e);
+          errorMessage = "Could not parse error response";
+        }
+
+        alert(`Error creating account: ${errorMessage}`);
+        return;
+      }
+
+      const data = await response.json();
+      console.log("User created successfully", data);
+
+      // Store user ID and authentication token from response
+      if (data) {
+        if (data.id) {
+          sessionStorage.setItem("userId", data.id);
+        }
+
+        // Store the token - important for authentication
+        if (data.token) {
+          localStorage.setItem("authToken", data.token);
+          sessionStorage.setItem("authToken", data.token);
+        }
+      }
+
+      // Redirect to congratulations page
+      router.push("/onboarding/congratulations");
+    } catch (error) {
+      console.error("API request failed:", error);
+      alert("Network error. Please check your connection and try again.");
+    }
   };
 
   const handleBack = () => {

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Sparkles, CheckCircle, ArrowRight } from "lucide-react";
+import { Sparkles, CheckCircle, ArrowRight, LogIn } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -34,6 +34,11 @@ export default function CongratulationsPage() {
     // Navigate to scan page
     router.push("/scan");
   };
+
+  const handleLogin = () => {
+    router.push("/login");
+  };
+
   const pageVariants = {
     initial: { opacity: 0, scale: 0.8 },
     animate: {
@@ -171,6 +176,7 @@ export default function CongratulationsPage() {
               transition={{ duration: 0.6, delay: 1.0 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              className="mb-4"
             >
               <Button
                 onClick={handleStartScanning}
@@ -183,6 +189,29 @@ export default function CongratulationsPage() {
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
                     <ArrowRight className="w-5 h-5" />
+                  </motion.div>
+                </span>
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Button
+                onClick={handleLogin}
+                className="w-full bg-[#004743] hover:bg-[#003a37] text-white font-medium py-6 text-xl rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Login
+                  <motion.div
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <LogIn className="w-5 h-5" />
                   </motion.div>
                 </span>
               </Button>

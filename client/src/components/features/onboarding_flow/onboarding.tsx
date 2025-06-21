@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import UserDetailsStep from "./steps/UserDetailsStep";
 import RoleSelectionStep from "./steps/RoleSelectionStep";
 import UserPreferencesStep from "./steps/UserPreferencesStep";
@@ -36,7 +35,6 @@ const OnboardingFlow = () => {
     allergies: ["none"],
   });
   const [selectedRole, setSelectedRole] = useState<string>("");
-  const { connected, account } = useWallet();
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [, setApiResponse] = useState<{
     success?: boolean;
@@ -52,10 +50,10 @@ const OnboardingFlow = () => {
     userDetails,
     setCurrentStep,
     account: {
-      address: account ? account.toString() : "",
-      publicKey: account ? account.publicKey.toString() : "",
+      address: "",
+      publicKey: "",
     },
-    connected,
+    connected: false,
     setIsCreatingUser,
     setApiResponse,
     setSelectedRole,

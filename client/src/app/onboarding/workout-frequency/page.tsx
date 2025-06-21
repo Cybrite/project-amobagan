@@ -109,7 +109,7 @@ export default function WorkoutFrequencyPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
-                {workoutOptions.map((option, index) => (
+                {workoutOptions.map((option) => (
                   <motion.div
                     key={option.id}
                     variants={itemVariants}

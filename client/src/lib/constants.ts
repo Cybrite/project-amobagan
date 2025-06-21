@@ -1,5 +1,5 @@
 // Server configuration
-export const SERVER_URL = "http://localhost:8080";
+export const SERVER_URL = "https://project-amobagan.onrender.com";
 
 // WebSocket configuration
-export const WS_URL = "ws://localhost:8080";
+export const WS_URL = "https://project-amobagan.onrender.com";
