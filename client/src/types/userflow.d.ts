@@ -49,3 +49,35 @@ export interface StepIndicatorProps {
   currentStep: number;
   totalSteps: number;
 }
+
+export interface WorkoutFrequency {
+  id: string;
+  label: string;
+}
+
+export interface HeightWeight {
+  height: string;
+  weight: string;
+}
+
+export interface GoalTimeframe {
+  id: string;
+  label: string;
+  description: string;
+}
+
+export interface CarouselItem {
+  title: string;
+  description: string;
+  image: string;
+}
+
+export interface UserPreferences {
+  workoutFrequency: string;
+  heightWeight: HeightWeight;
+  healthGoals: string[];
+  goalTimeframe: string;
+  dietaryPreferences: string[];
+  allergies: string[];
+  nutritionPriorities: string[];
+}
