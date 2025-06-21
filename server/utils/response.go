@@ -7,6 +7,57 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ValidationError represents a validation error
+type ValidationError struct {
+	Message string
+}
+
+func (e *ValidationError) Error() string {
+	return e.Message
+}
+
+// NewValidationError creates a new validation error
+func NewValidationError(message string) error {
+	return &ValidationError{Message: message}
+}
+
+// SendErrorResponse sends a standardized error response
+func SendErrorResponse(c *gin.Context, statusCode int, message string, details string) {
+	response := Response{
+		Success: false,
+		Message: message,
+		Error: &ErrorInfo{
+			Code:    getErrorCode(statusCode),
+			Message: message,
+			Details: details,
+		},
+		Timestamp: time.Now().UTC(),
+	}
+	c.JSON(statusCode, response)
+}
+
+// getErrorCode maps HTTP status codes to error codes
+func getErrorCode(statusCode int) string {
+	switch statusCode {
+	case http.StatusBadRequest:
+		return "BAD_REQUEST"
+	case http.StatusUnauthorized:
+		return "UNAUTHORIZED"
+	case http.StatusForbidden:
+		return "FORBIDDEN"
+	case http.StatusNotFound:
+		return "NOT_FOUND"
+	case http.StatusUnprocessableEntity:
+		return "VALIDATION_ERROR"
+	case http.StatusInternalServerError:
+		return "INTERNAL_SERVER_ERROR"
+	case http.StatusConflict:
+		return "CONFLICT"
+	default:
+		return "UNKNOWN_ERROR"
+	}
+}
+
 // Response represents the standard API response structure
 type Response struct {
 	Success   bool        `json:"success"`
@@ -79,7 +130,7 @@ func NotFound(c *gin.Context, message string) {
 	ErrorResponse(c, http.StatusNotFound, "NOT_FOUND", message, nil)
 }
 
-func ValidationError(c *gin.Context, message string, details interface{}) {
+func ValidationErrorResponse(c *gin.Context, message string, details interface{}) {
 	ErrorResponse(c, http.StatusUnprocessableEntity, "VALIDATION_ERROR", message, details)
 }
 
