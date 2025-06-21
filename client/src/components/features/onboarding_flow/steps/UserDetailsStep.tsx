@@ -1,0 +1,117 @@
+import { UserDetails } from "@/types/userflow";
+import { User, Phone, ChevronRight } from "lucide-react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
+interface UserDetailsStepProps {
+  userDetails: UserDetails;
+  setUserDetails: (details: UserDetails) => void;
+  onSubmit: (e: React.FormEvent) => void;
+}
+
+const UserDetailsStep = ({
+  userDetails,
+  setUserDetails,
+  onSubmit,
+}: UserDetailsStepProps) => (
+  <Card className="bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+    <CardHeader className="text-center space-y-4">
+      <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center">
+        <User className="w-8 h-8 text-white" />
+      </div>
+      <div>
+        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          Welcome to Aptos Marketplace
+        </CardTitle>
+        <CardDescription className="text-gray-400 mt-2">
+          Let&apos;s get started by collecting some basic information
+        </CardDescription>
+      </div>
+    </CardHeader>
+
+    <CardContent>
+      <form onSubmit={onSubmit} className="space-y-6">
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="name" className="text-gray-300 font-medium">
+              Full Name *
+            </Label>
+            <div className="relative mt-2">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="name"
+                type="text"
+                required
+                value={userDetails.name}
+                onChange={(e) =>
+                  setUserDetails({ ...userDetails, name: e.target.value })
+                }
+                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                placeholder="Enter your full name"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="phone" className="text-gray-300 font-medium">
+              Phone Number *
+            </Label>
+            <div className="relative mt-2">
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="phone"
+                type="tel"
+                required
+                value={userDetails.phone}
+                onChange={(e) =>
+                  setUserDetails({ ...userDetails, phone: e.target.value })
+                }
+                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                placeholder="Enter your phone number"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="password" className="text-gray-300 font-medium">
+              Password *
+            </Label>
+            <div className="relative mt-2">
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={userDetails.password}
+                onChange={(e) =>
+                  setUserDetails({ ...userDetails, password: e.target.value })
+                }
+                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02]"
+        >
+          Continue to Wallet Setup
+          <ChevronRight className="w-5 h-5 ml-2" />
+        </Button>
+      </form>
+    </CardContent>
+  </Card>
+);
+
+export default UserDetailsStep;
