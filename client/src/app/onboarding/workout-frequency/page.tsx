@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import StepIndicator from "@/components/features/onboarding_flow/components/StepIndicator";
 
 const workoutOptions = [
   { id: "everyday", label: "Every day" },
@@ -32,8 +33,11 @@ export default function WorkoutFrequencyPage() {
         workoutFrequency: selectedFrequency,
       })
     );
-
     router.push("/onboarding/height-weight");
+  };
+
+  const handleBack = () => {
+    router.back();
   };
 
   return (
@@ -41,6 +45,14 @@ export default function WorkoutFrequencyPage() {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
 
       <div className="relative w-full max-w-md">
+        <StepIndicator
+          currentStep={2}
+          totalSteps={8}
+          onBack={handleBack}
+          variant="light"
+          className="mb-6"
+        />
+
         <Card className="bg-[#F0EDE4]">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
