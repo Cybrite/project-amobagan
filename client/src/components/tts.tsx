@@ -170,7 +170,7 @@ export default function TTS({ text }: { text: string }) {
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" />
                                     </svg>
                                 </div>
                                 <span className="font-medium text-gray-800">

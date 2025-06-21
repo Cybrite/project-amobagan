@@ -8,6 +8,7 @@ import {
 
 import { useSearchParams } from 'next/navigation';
 
+import EatFoodButton from '@/components/EatFoodButton';
 import {
   NutritionStreaming,
 } from '@/components/features/nutrition_streaming/NutritionStreaming';
@@ -19,9 +20,11 @@ export default function StreamingPage() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [ttsContent, setTtsContent] = useState<string>("");
     const [streamingComplete, setStreamingComplete] = useState<boolean>(false);
+    const [nutritionalElements, setNutritionalElements] = useState<string[]>(
+        []
+    );
 
     useEffect(() => {
-        // Extract barcode from URL query parameter
         const barcodeParam = searchParams.get("barcode");
         if (barcodeParam) {
             setBarcode(barcodeParam);
@@ -34,11 +37,25 @@ export default function StreamingPage() {
         setIsLoading(false);
     };
 
-    const handleAnalysisComplete = (analysis: string) => {
-        console.log("Streaming analysis complete, triggering TTS");
+    useEffect(() => {
+        if (!streamingComplete) return;
+        const elements =
+            document.getElementById("nutritionalInfos")?.textContent;
+        if (elements) {
+            try {
+                const elementArray = elements
+                    .split(",")
+                    .map((element) => element.trim());
+                setNutritionalElements(elementArray);
+            } catch (error) {
+                console.error("Error parsing nutritional elements:", error);
+            }
+        }
+    }, [streamingComplete]);
+
+    const handleAnalysisComplete = () => {
         setStreamingComplete(true);
 
-        // Extract text content from the HTML analysis
         const textContent =
             document.getElementById("transcript_summary")?.textContent;
 
@@ -47,8 +64,19 @@ export default function StreamingPage() {
         }
     };
 
+    const handleEatFood = (elements: string[]) => {
+        console.log("User ate food with elements:", elements);
+    };
+
     return (
         <div className="min-h-screen">
+            {/* Eat Food Button */}
+            <EatFoodButton
+                barcode={barcode}
+                nutritionalElements={nutritionalElements}
+                onEatFood={handleEatFood}
+            />
+
             {/* Only show TTS when streaming is complete */}
             {streamingComplete && <TTS text={ttsContent} />}
             <div>

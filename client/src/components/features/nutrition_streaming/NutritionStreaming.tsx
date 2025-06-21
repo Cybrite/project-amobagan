@@ -76,7 +76,6 @@ export function NutritionStreaming({
 
         ws.onmessage = (event) => {
             const message: StreamMessage = JSON.parse(event.data);
-            console.log(message);
             if (message.type === "stream_chunk") {
                 setCurrentAnalysis((prev) => prev + message.content);
                 if (!hasReceivedFirstChunk) {

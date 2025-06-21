@@ -160,6 +160,7 @@ OUTPUT TEMPLATE STRUCTURE
                     ONLY INCLUDE ELEMENTS THAT ARE MISSING OR INSUFFICIENT.
                     EXAMPLE: If user priorities are "Protein, Fiber, Vitamins" and product lacks fiber, list only "Fiber".
                     ONLY NAME NO DESCRIPTION
+                    THE FORMAT IS THIS element1,element2 AS TEXT
                 ]
                 </div>
 
