@@ -14,7 +14,6 @@ export default function UserDetailsPage() {
   const [userDetails, setUserDetails] = useState<UserDetails>({
     name: "",
     phone: "",
-    email: "",
     password: "",
   });
 
@@ -88,29 +87,6 @@ export default function UserDetailsPage() {
                       }
                       className="pl-10 bg-[#FFFDF7] text-black placeholder:text-gray-500"
                       placeholder="Enter your phone number"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="email" className="text-black font-medium">
-                    Email *
-                  </Label>
-                  <div className="relative mt-2">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="email"
-                      type="email"
-                      required
-                      value={userDetails.email}
-                      onChange={(e) =>
-                        setUserDetails({
-                          ...userDetails,
-                          email: e.target.value,
-                        })
-                      }
-                      className="pl-10 bg-[#FFFDF7] text-black placeholder:text-gray-500"
-                      placeholder="Enter your email"
                     />
                   </div>
                 </div>
