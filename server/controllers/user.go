@@ -98,7 +98,14 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		return
 	}
 
+	// Set the user ID from the database insertion result
+	user.ID = result.InsertedID.(primitive.ObjectID)
+
 	token, err := utils.GenerateJWT(user)
+	if err != nil {
+		utils.InternalServerError(c, err.Error(), nil)
+		return
+	}
 
 	userData := map[string]interface{}{
 		"_id": result.InsertedID.(primitive.ObjectID).Hex(),
@@ -109,11 +116,6 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		"petraPublicKey": user.PetraPublicKey,
 		"healthStatus": user.HealthStatus,
 		"role": user.Role,
-	}
-
-	if err != nil {
-		utils.InternalServerError(c, err.Error(), nil)
-		return
 	}
 
 	utils.OK(c, "User created successfully", userData)
