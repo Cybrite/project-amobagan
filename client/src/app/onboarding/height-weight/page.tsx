@@ -45,13 +45,10 @@ export default function HeightWeightPage() {
   const handleBack = () => {
     router.push("/onboarding/workout-frequency");
   };
-
-  // Generate height options (4'0" to 7'0")
+  // Generate height options (120 to 220 cm)
   const heightOptions = [];
-  for (let feet = 4; feet <= 7; feet++) {
-    for (let inches = 0; inches <= 11; inches++) {
-      heightOptions.push(`${feet}'${inches}"`);
-    }
+  for (let height = 120; height <= 220; height++) {
+    heightOptions.push(height.toString());
   }
 
   // Generate weight options (80 to 300 kg)
@@ -151,12 +148,11 @@ export default function HeightWeightPage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                  >
-                    <Label
+                  >                    <Label
                       htmlFor="height"
                       className="text-sm font-medium text-[#004743]/80"
                     >
-                      Height (ft and in)
+                      Height (cm)
                     </Label>
                     <Select
                       value={userInfo.height}
@@ -170,14 +166,13 @@ export default function HeightWeightPage() {
                       <SelectTrigger className="bg-white/80 backdrop-blur-sm border-2 border-[#004743]/20 text-black rounded-xl h-14 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300 focus:border-[#004743] focus:ring-2 focus:ring-[#004743]/20">
                         <SelectValue placeholder="Height" />
                       </SelectTrigger>
-                      <SelectContent className="max-h-48 rounded-xl border-2 border-[#004743]/20 bg-white/95 backdrop-blur-sm">
-                        {heightOptions.map((height) => (
+                      <SelectContent className="max-h-48 rounded-xl border-2 border-[#004743]/20 bg-white/95 backdrop-blur-sm">                        {heightOptions.map((height) => (
                           <SelectItem
                             key={height}
                             value={height}
                             className="rounded-lg hover:bg-[#004743]/10 focus:bg-[#004743]/10 font-medium"
                           >
-                            {height}
+                            {height} cm
                           </SelectItem>
                         ))}
                       </SelectContent>

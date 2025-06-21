@@ -16,44 +16,30 @@ export default function WelcomePage() {
 
   return (
     <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      <div className="absolute top-8 right-8 animate-fade-in-delayed">
-        <div className="w-12 h-12 rounded-full bg-gray-300 border-2 border-white shadow-sm overflow-hidden">
-          <Image
-            src="/placeholder.svg"
-            alt="Profile"
-            width={48}
-            height={48}
-            className="object-cover"
-          />
-        </div>
-      </div>
-
-      <div className="w-full max-w-sm space-y-16">
+      <div className="w-full max-w-sm space-y-16 z-30 flex-col justify-center">
         {/* Header Section */}
-        <div className="text-center space-y-8 animate-fade-in-up">
+        <div className="absolute top-1 left-0 text-center space-y-8 animate-fade-in-up z-30 backdrop-blur-3xl py-2">
           <div className="space-y-4">
-            <h2 className="text-3xl text-gray-700 font-normal">Welcome to</h2>
-            <h1 className="text-5xl font-bold text-black">NutriScan</h1>
+        <h2 className="text-3xl text-gray-700 font-normal">Welcome to</h2>
+        <h1 className="text-5xl font-bold text-black">NutriScan</h1>
           </div>
           <p className="text-gray-600 text-lg leading-relaxed px-2">
-            A Community driven initiative to let you make better food choices
+        A Community driven initiative to let you make better food choices
           </p>
         </div>
-
-        {/* Cards Section */}
-        <div className="grid grid-cols-2 gap-4 h-64 animate-fade-in-up-delayed">
-          {/* Large card on the left */}
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm"></div>
-
-          {/* Two stacked cards on the right */}
-          <div className="space-y-4">
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-[120px]"></div>
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-[120px]"></div>
-          </div>
-        </div>
-
+        <div className="absolute top-15 left-0 w-full h-full flex items-center justify-center animate-fade-in-up-delayed">
+          <Image
+            src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750526694/Phone_3a_Pro_mockup_silver_portrait_dp0mgy.png"
+            height={120}
+            width={150}
+            alt={""}
+          />
+        </div>{" "}
         {/* Buttons Section */}
-        <div className="space-y-8 animate-fade-in-up-more-delayed">
+        <div
+          className="absolute bottom-0 left-0 right-0 space-y-8 animate-fade-in-up-more-delayed backdrop-blur-2xl bg-white/30 rounded-t-3xl p-6 z-20"
+          style={{ marginBottom: "60px" }}
+        >
           <Button
             onClick={handleGetStarted}
             className="w-full bg-[#004743] hover:bg-[#003a37] text-white font-medium py-6 text-xl rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-sm"
