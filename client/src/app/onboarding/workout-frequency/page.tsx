@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, Dumbbell, Weight, BicepsFlexed } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StepIndicator from "@/components/features/onboarding_flow/components/StepIndicator";
 
@@ -64,15 +63,14 @@ export default function WorkoutFrequencyPage() {
         onBack={handleBack}
         variant="light"
       />
-
-      <Card className="bg-[#F0EDE4] w-full">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
+      <div className="bg-[#F0EDE4] w-full">
+        <div className="text-center pb-6">
+          <h1 className="text-2xl font-bold">
             How many times do you workout per week?
-          </CardTitle>
-        </CardHeader>
+          </h1>
+        </div>
 
-        <CardContent>
+        <div>
           <form onSubmit={handleSubmit} className="space-y-6">
             {" "}
             <div className="space-y-4">
@@ -81,7 +79,7 @@ export default function WorkoutFrequencyPage() {
                   key={option.id}
                   onClick={() => setSelectedFrequency(option.id)}
                   className={`
-                      p-6 cursor-pointer transition-all border-2 w-full bg-white
+                      p-6 cursor-pointer rounded-sm transition-all border border-black w-full bg-white
                       ${
                         selectedFrequency === option.id
                           ? "border-[#004743] bg-[#004743]/10"
@@ -98,7 +96,8 @@ export default function WorkoutFrequencyPage() {
                         <div className="text-sm text-gray-600 mt-1">
                           {option.description}
                         </div>
-                      </div>                    </div>
+                      </div>{" "}
+                    </div>
                     <div className="flex items-center">
                       <option.icon
                         className={`w-6 h-6 ${
@@ -118,11 +117,11 @@ export default function WorkoutFrequencyPage() {
               className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] mt-6"
             >
               Continue
-              <ChevronRight className="w-5 h-5 ml-2" />
+              <ChevronRight className="w-5 h-5 ml-2" />{" "}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
