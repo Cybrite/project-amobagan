@@ -7,7 +7,7 @@ export const ROLE_OPTIONS: RoleOption[] = [
     title: "Continue as User",
     description: "Browse and purchase products from verified vendors",
     icon: <User className="w-6 h-6" />,
-    color: "from-blue-500 to-cyan-500",
+    color: "#00A4EB", // Solid blue color
     features: [
       "Browse Products",
       "Make Purchases",
@@ -20,7 +20,7 @@ export const ROLE_OPTIONS: RoleOption[] = [
     title: "Apply for Business License",
     description: "Get verified and sell your products on our platform",
     icon: <Building2 className="w-6 h-6" />,
-    color: "from-green-500 to-emerald-500",
+    color: "#00C174", // Solid green color
     features: [
       "Business Verification",
       "Vendor Dashboard",

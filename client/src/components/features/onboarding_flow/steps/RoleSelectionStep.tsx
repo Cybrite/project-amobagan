@@ -25,18 +25,30 @@ const RoleSelectionStep = ({
   onRoleSelect,
   onBack,
 }: RoleSelectionStepProps) => (
-  <Card className="w-full bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+  <Card className="bg-[#F5F3F0] backdrop-blur-xl">
     <CardHeader className="text-center space-y-4">
-      <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center">
-        <UserCheck className="w-8 h-8 text-white" />
-      </div>
-      <div>
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-          Choose Your Role
-        </CardTitle>
-        <CardDescription className="text-gray-400 mt-2">
-          Select how you&apos;d like to use the Aptos Marketplace
-        </CardDescription>
+      <div style={{ marginBottom: "32px" }}>
+        <h1
+          style={{
+            fontSize: "28px",
+            fontWeight: "700",
+            color: "#000",
+            marginBottom: "12px",
+            lineHeight: "1.2",
+          }}
+        >
+          Who are you?
+        </h1>
+        <p
+          style={{
+            fontSize: "16px",
+            color: "#666",
+            lineHeight: "1.4",
+            margin: 0,
+          }}
+        >
+          We'll personalize recommendations based on what matters to you.
+        </p>
       </div>
     </CardHeader>
 
@@ -52,46 +64,92 @@ const RoleSelectionStep = ({
         </Button>
       </div>
 
-      {roleOptions.map((role) => (
-        <Card
-          key={role.id}
-          className={`bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group ${
-            selectedRole === role.id ? "ring-2 ring-purple-500" : ""
-          }`}
-          onClick={() => onRoleSelect(role.id)}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-start space-x-4">
-              <div
-                className={`w-12 h-12 bg-gradient-to-br ${role.color} rounded-xl flex items-center justify-center text-white`}
-              >
-                {role.icon}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-white group-hover:text-purple-300 transition-colors">
-                  {role.title}
-                </h3>
-                <p className="text-gray-400 text-sm mt-1 mb-3">
-                  {role.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {role.features.map((feature, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="bg-white/10 text-gray-300 border-white/20 text-xs"
-                    >
-                      {feature}
-                    </Badge>
-                  ))}
+         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {roleOptions.map((role) => (
+            <div 
+              key={role.id}
+              onClick={() => onRoleSelect(role.id)}
+              style={{
+                backgroundColor: '#fff',
+                border: `2px solid ${selectedRole === role.id ? role.color : '#E5E5E5'}`,
+                borderRadius: '16px',
+                padding: '20px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                transform: selectedRole === role.id ? 'scale(1.02)' : 'scale(1)',
+                boxShadow: selectedRole === role.id ? '0 8px 25px rgba(0,0,0,0.1)' : '0 2px 10px rgba(0,0,0,0.05)'
+              }}
+              onMouseEnter={(e) => {
+                if (selectedRole !== role.id) {
+                  e.currentTarget.style.transform = 'scale(1.01)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (selectedRole !== role.id) {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+                }
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  backgroundColor: `${role.color}`,
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  color: '#fff'
+                }}>
+                  {role.icon}
+                </div>
+                
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontWeight: '600',
+                      color: '#000',
+                      margin: 0
+                    }}>
+                      {role.title}
+                    </h3>
+                    <ChevronRight size={20} style={{ color: '#999' }} />
+                  </div>
+                  
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#666',
+                    lineHeight: '1.4',
+                    margin: '0 0 16px 0'
+                  }}>
+                    {role.description}
+                  </p>
+                  
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {role.features.map((feature, index) => (
+                      <span key={index} style={{
+                        fontSize: '12px',
+                        color: '#666',
+                        backgroundColor: '#F8F8F8',
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid #E5E5E5'
+                      }}>
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-300 transition-colors" />
             </div>
-          </CardContent>
-        </Card>
-      ))}
-
+          ))}
+        </div>
+      
+    
       <Separator className="bg-white/10 my-6" />
 
       <div className="text-center">
