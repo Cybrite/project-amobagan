@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const carouselItems = [
   {
@@ -34,17 +34,16 @@ export default function CarouselPage() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleNext = () => {
-    if (currentIndex < carouselItems.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
+  // Auto-rotation effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 2000);
 
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
+    return () => clearInterval(interval);
+  }, []);
 
   const handleContinue = () => {
     router.push("/onboarding/user-details");
@@ -54,7 +53,12 @@ export default function CarouselPage() {
     <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
 
-      <div className="relative w-full max-w-md">
+      <motion.div
+        className="relative w-full max-w-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
         <Card className="bg-[#F0EDE4]">
           <CardContent className="p-8 flex flex-col items-center">
             <div className="flex w-full justify-between mb-2">
@@ -70,11 +74,15 @@ export default function CarouselPage() {
 
             <div className="py-12 px-4 text-center">
               {carouselItems.map((item, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className={`transition-opacity duration-300 ${
-                    currentIndex === index ? "block" : "hidden"
-                  }`}
+                  className={`${currentIndex === index ? "block" : "hidden"}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{
+                    opacity: currentIndex === index ? 1 : 0,
+                    y: currentIndex === index ? 0 : 20,
+                  }}
+                  transition={{ duration: 0.5 }}
                 >
                   <div className="flex justify-center mb-6">
                     <Image
@@ -87,37 +95,26 @@ export default function CarouselPage() {
                   </div>
                   <h2 className="text-2xl font-bold mb-4">{item.title}</h2>
                   <p className="text-gray-600">{item.description}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
 
-            <div className="flex justify-between w-full mt-8 mb-4">
-              <Button
-                onClick={handlePrevious}
-                variant="ghost"
-                className={`${currentIndex === 0 ? "invisible" : ""}`}
-              >
-                <ChevronLeft className="h-6 w-6" />
-              </Button>
-
-              {currentIndex < carouselItems.length - 1 ? (
-                <Button onClick={handleNext} variant="ghost">
-                  <ChevronRight className="h-6 w-6" />
-                </Button>
-              ) : (
-                <div></div>
-              )}
-            </div>
-
-            <Button
-              onClick={handleContinue}
-              className="w-full mt-4 bg-[#004743] text-white font-medium py-6 transition-all duration-300 transform hover:scale-[1.02]"
+            <motion.div
+              className="w-full"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Continue
-            </Button>
+              <Button
+                onClick={handleContinue}
+                className="w-full mt-4 bg-[#004743] text-white font-medium py-6 text-xl rounded-lg transition-colors duration-300 shadow-sm"
+              >
+                Continue
+              </Button>
+            </motion.div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
     </div>
   );
 }
