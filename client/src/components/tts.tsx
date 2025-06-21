@@ -4,6 +4,16 @@ import {
   useState,
 } from 'react';
 
+import {
+  CheckCircle,
+  Loader2,
+  Pause,
+  Play,
+  RotateCcw,
+  Volume2,
+  X,
+} from 'lucide-react';
+
 // Audio cache to store generated audio
 const audioCache = new Map<string, HTMLAudioElement>();
 
@@ -128,31 +138,11 @@ export default function TTS({ text }: { text: string }) {
                     title="Listen to nutrition analysis"
                 >
                     {isGenerating ? (
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                        <Loader2 className="w-6 h-6 animate-spin" />
                     ) : hasAudio ? (
-                        <svg
-                            className="w-6 h-6"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
+                        <Play className="w-6 h-6" />
                     ) : (
-                        <svg
-                            className="w-6 h-6"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
+                        <Volume2 className="w-6 h-6" />
                     )}
                 </button>
             </div>
@@ -165,13 +155,7 @@ export default function TTS({ text }: { text: string }) {
                         <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                    <svg
-                                        className="w-5 h-5 text-white"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" />
-                                    </svg>
+                                    <CheckCircle className="w-5 h-5 text-white" />
                                 </div>
                                 <span className="font-medium text-gray-800">
                                     AI Assistant
@@ -181,19 +165,7 @@ export default function TTS({ text }: { text: string }) {
                                 onClick={handleClose}
                                 className="text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                <svg
-                                    className="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
+                                <X className="w-5 h-5" />
                             </button>
                         </div>
 
@@ -210,7 +182,7 @@ export default function TTS({ text }: { text: string }) {
                         <div className="flex items-center gap-2">
                             {isGenerating ? (
                                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
                                     Generating audio...
                                 </div>
                             ) : (
@@ -226,32 +198,12 @@ export default function TTS({ text }: { text: string }) {
                                     >
                                         {isPlaying ? (
                                             <>
-                                                <svg
-                                                    className="w-4 h-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 20 20"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
+                                                <Pause className="w-4 h-4" />
                                                 Pause
                                             </>
                                         ) : (
                                             <>
-                                                <svg
-                                                    className="w-4 h-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 20 20"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
+                                                <Play className="w-4 h-4" />
                                                 Play
                                             </>
                                         )}
@@ -262,17 +214,7 @@ export default function TTS({ text }: { text: string }) {
                                             onClick={handleReplay}
                                             className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 transition-colors"
                                         >
-                                            <svg
-                                                className="w-4 h-4"
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
+                                            <RotateCcw className="w-4 h-4" />
                                             Replay
                                         </button>
                                     )}
@@ -282,17 +224,7 @@ export default function TTS({ text }: { text: string }) {
                                             onClick={handleTTS}
                                             className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 transition-colors"
                                         >
-                                            <svg
-                                                className="w-4 h-4"
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
+                                            <Volume2 className="w-4 h-4" />
                                             Generate
                                         </button>
                                     )}
