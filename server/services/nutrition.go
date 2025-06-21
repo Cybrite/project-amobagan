@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 
 	"github.com/gorilla/websocket"
@@ -281,6 +282,8 @@ func (s *NutritionAnalysisService) StreamNutritionAnalysisWithPreferences(
 		return fmt.Errorf("failed to read prompt template: %v", err)
 	}
 
+	log.Println("userPrefs", userPrefs)
+
 	prompt := s.createStreamingPrompt(product, userPrefs, promptTemplate)
 
 	initialMsg := map[string]interface{}{
@@ -465,17 +468,7 @@ func (s *NutritionAnalysisService) formatStreamingResponse(
 	// Clean up the response and ensure proper markdown formatting
 	formatted := strings.TrimSpace(response)
 	
-	// Add metadata at the end
-	metadata := fmt.Sprintf(`
----
-*Analysis completed for %s*
-*User Goals: %s*
-*Dietary Preferences: %s*
-`, 
-		product.ProductIdentification.ProductName,
-		strings.Join(userPrefs.HealthGoals, ", "),
-		strings.Join(userPrefs.DietaryPreferences, ", "),
-	)
 	
-	return formatted + metadata
+	
+	return formatted
 } 

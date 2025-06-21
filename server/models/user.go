@@ -17,5 +17,10 @@ type User struct {
 	Age                string              `json:"age" bson:"age"`
 	Height             string              `json:"height" bson:"height"`
 	Weight             string              `json:"weight" bson:"weight"`
-	
+	NutritionalStatus  map[string]int      `json:"nutritionalStatus" bson:"nutritionalStatus"`
+}
+
+// NutritionalUpdateRequest represents the request to update nutritional status
+type NutritionalUpdateRequest struct {
+	NutritionalElements []string `json:"nutritionalElements" binding:"required"`
 }

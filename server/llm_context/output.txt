@@ -151,8 +151,18 @@ OUTPUT TEMPLATE STRUCTURE
                 </div>
 
                 <div id="transcript_summary">
-                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST]
+                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST IN HINDI]
                 </div>
+
+                <div id="nutritionalInfos" style="display:none;">
+                [
+                    LIST ANY NUTRITIONAL ELEMENTS THAT CONFLICT WITH USER'S PRIORITIES.
+                    ONLY INCLUDE ELEMENTS THAT ARE MISSING OR INSUFFICIENT.
+                    EXAMPLE: If user priorities are "Protein, Fiber, Vitamins" and product lacks fiber, list only "Fiber".
+                    ONLY NAME NO DESCRIPTION
+                ]
+                </div>
+
             </div>
         </div>
 
@@ -168,6 +178,7 @@ IMPLEMENTATION INSTRUCTIONS FOR LLM:
    - Green (#27AE60) for positive recommendations
    - Blue (#3498DB) for neutral information
    - Orange (#F39C12) for cautions
+7. DO NOT INCLUDE ```html IN YOUR RESPONSE VERY IMPORTANT
 
 PERSONALIZATION RULES:
 - Extract user's health goals from the input
