@@ -29,7 +29,7 @@ export default function WelcomePage() {
         </div>
         <div className="absolute top-15 left-0 w-full h-full flex items-center justify-center animate-fade-in-up-delayed">
           <Image
-            src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750526694/Phone_3a_Pro_mockup_silver_portrait_dp0mgy.png"
+            src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750537876/Phone_3a_Pro_mockup_silver_left_label_m2kvok.png"
             height={120}
             width={150}
             alt={""}
