@@ -17,10 +17,8 @@ const StepIndicator = ({
 }: StepIndicatorProps) => {
   const progressPercentage = (currentStep / totalSteps) * 100;
   const isDark = variant === "dark";
-
   return (
     <div className={`space-y-4 mb-8 ${className}`}>
-      {/* Back Navigation - Separate from progress indicator */}
       {onBack && showBackButton && currentStep > 1 && (
         <div className="flex justify-start">
           <button
@@ -45,15 +43,13 @@ const StepIndicator = ({
                 strokeWidth={2}
                 d="M15 19l-7-7 7-7"
               />
-            </svg>{" "}
+            </svg>
             Back
           </button>
         </div>
-      )}{" "}
-      {/* Progress Indicator - Clean and centered */}
+      )}
       <div className="flex items-center justify-center">
         <div className="relative w-full max-w-80">
-          {/* Progress bar head image - positioned above the bar */}
           <div
             className="absolute -top-2.5 transform -translate-x-1/2 transition-all duration-500 ease-out z-10"
             style={{
@@ -66,7 +62,6 @@ const StepIndicator = ({
               className="w-6 h-6"
             />
           </div>
-          {/* Progress bar */}
           <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full transition-all duration-500 ease-out bg-[#004743] rounded-full"
@@ -77,7 +72,6 @@ const StepIndicator = ({
           </div>
         </div>
       </div>
-      {/* Step counter */}
       <div
         className={`text-center text-sm ${
           isDark ? "text-white/60" : "text-gray-500"
