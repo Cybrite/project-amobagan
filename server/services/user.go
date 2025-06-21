@@ -32,10 +32,11 @@ func GetUserByID(userID string) (*models.User, error) {
 		NutritionPriorities: user.NutritionPriorities,
 		FullName: user.FullName,
 		PhoneNo: user.PhoneNo,
-		PetraWalletAddress: user.PetraWalletAddress,
-		PetraPublicKey: user.PetraPublicKey,
 		HealthStatus: user.HealthStatus,
-		Role: user.Role,
+		WorkOutsPerWeek: user.WorkOutsPerWeek,
+		Age: user.Age,
+		Height: user.Height,
+		Weight: user.Weight,
 	}
 
 	log.Println("User Data:", userData)

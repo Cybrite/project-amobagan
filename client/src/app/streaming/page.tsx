@@ -11,11 +11,14 @@ import { useSearchParams } from 'next/navigation';
 import {
   NutritionStreaming,
 } from '@/components/features/nutrition_streaming/NutritionStreaming';
+import TTS from '@/components/tts';
 
 export default function StreamingPage() {
     const searchParams = useSearchParams();
     const [barcode, setBarcode] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [ttsContent, setTtsContent] = useState<string>("");
+    const [streamingComplete, setStreamingComplete] = useState<boolean>(false);
 
     useEffect(() => {
         // Extract barcode from URL query parameter
@@ -31,8 +34,23 @@ export default function StreamingPage() {
         setIsLoading(false);
     };
 
+    const handleAnalysisComplete = (analysis: string) => {
+        console.log("Streaming analysis complete, triggering TTS");
+        setStreamingComplete(true);
+
+        // Extract text content from the HTML analysis
+        const textContent =
+            document.getElementById("transcript_summary")?.textContent;
+
+        if (textContent && textContent.trim()) {
+            setTtsContent(textContent);
+        }
+    };
+
     return (
         <div className="min-h-screen">
+            {/* Only show TTS when streaming is complete */}
+            {streamingComplete && <TTS text={ttsContent} />}
             <div>
                 {isLoading && barcode && (
                     <div className="flex items-center justify-center min-h-[200px]">
@@ -50,6 +68,7 @@ export default function StreamingPage() {
                 <NutritionStreaming
                     initialBarcode={barcode}
                     onFirstStreamChunk={handleFirstStreamChunk}
+                    onAnalysisComplete={handleAnalysisComplete}
                 />
             </div>
         </div>

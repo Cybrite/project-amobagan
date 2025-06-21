@@ -44,12 +44,7 @@ func validateUser(user models.User) error {
 	if user.Password == "" {
 		return errors.New("password is required")
 	}
-	if user.Role == "" {
-		return errors.New("role is required")
-	}
-	if user.Role != "admin" && user.Role != "vendor" && user.Role != "user" {
-		return errors.New("invalid role")
-	}
+	
 	return nil
 }
 
@@ -98,7 +93,6 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		return
 	}
 
-	// Set the user ID from the database insertion result
 	user.ID = result.InsertedID.(primitive.ObjectID)
 
 	token, err := utils.GenerateJWT(user)
@@ -112,10 +106,11 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		"token": token,
 		"fullName": user.FullName,
 		"phoneNo": user.PhoneNo,
-		"petraWalletAddress": user.PetraWalletAddress,
-		"petraPublicKey": user.PetraPublicKey,
+		"workOutsPerWeek": user.WorkOutsPerWeek,
+		"age": user.Age,
+		"height": user.Height,
+		"weight": user.Weight,
 		"healthStatus": user.HealthStatus,
-		"role": user.Role,
 	}
 
 	utils.OK(c, "User created successfully", userData)
@@ -165,10 +160,11 @@ func (u *UserController) LoginUser(c *gin.Context) {
 		"token": token,
 		"fullName": user.FullName,
 		"phoneNo": user.PhoneNo,
-		"petraWalletAddress": user.PetraWalletAddress,
-		"petraPublicKey": user.PetraPublicKey,
+		"workOutsPerWeek": user.WorkOutsPerWeek,
+		"age": user.Age,
+		"height": user.Height,
+		"weight": user.Weight,
 		"healthStatus": user.HealthStatus,
-		"role": user.Role,
 	}
 
 	utils.OK(c, "User logged in successfully", userData)
