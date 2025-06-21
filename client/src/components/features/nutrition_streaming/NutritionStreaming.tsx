@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card';
+import { WS_URL } from '@/lib/constants';
 
 interface StreamMessage {
     type: string;
@@ -63,7 +64,7 @@ export function NutritionStreaming({
             return;
         }
 
-        const wsUrl = `ws://localhost:8080/ws/nutrition/stream?token=${encodeURIComponent(
+        const wsUrl = `${WS_URL}/ws/nutrition/stream?token=${encodeURIComponent(
             token
         )}`;
         const ws = new WebSocket(wsUrl);

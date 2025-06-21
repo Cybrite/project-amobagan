@@ -4,6 +4,8 @@ import { useCallback } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { SERVER_URL } from '@/lib/constants';
+
 interface OnboardingHandlersProps {
     userDetails: {
         name: string;
@@ -178,16 +180,13 @@ export const useOnboardingHandlers = ({
                 };
 
                 // Call API to create user
-                const response = await fetch(
-                    "http://localhost:8080/api/user/create",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(userData),
-                    }
-                );
+                const response = await fetch(`${SERVER_URL}/api/user/create`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(userData),
+                });
 
                 const data = await response.json();
 
@@ -275,16 +274,13 @@ export const useOnboardingHandlers = ({
                 };
 
                 // Call API to create user with preferences
-                const response = await fetch(
-                    "http://localhost:8080/api/user/create",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(userData),
-                    }
-                );
+                const response = await fetch(`${SERVER_URL}/api/user/create`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(userData),
+                });
 
                 const data = await response.json();
 
