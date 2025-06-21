@@ -1,57 +1,20 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, Check } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import StepIndicator from "@/components/features/onboarding_flow/components/StepIndicator";
-
-const allergiesOptions = [
-  { id: "peanuts", label: "Peanuts" },
-  { id: "tree_nuts", label: "Tree Nuts" },
-  { id: "dairy", label: "Dairy" },
-  { id: "eggs", label: "Eggs" },
-  { id: "wheat", label: "Wheat" },
-  { id: "soy", label: "Soy" },
-  { id: "fish", label: "Fish" },
-  { id: "shellfish", label: "Shellfish" },
-  { id: "sesame", label: "Sesame" },
-  { id: "none", label: "No Allergies" },
-];
 
 export default function FoodAllergiesPage() {
   const router = useRouter();
-  const [selectedAllergies, setSelectedAllergies] = useState<string[]>([
-    "none",
-  ]);
-
-  const toggleAllergy = (allergyId: string) => {
-    // Handle "No Allergies" option specially
-    if (allergyId === "none") {
-      if (selectedAllergies.includes("none")) {
-        setSelectedAllergies([]);
-      } else {
-        setSelectedAllergies(["none"]);
-      }
-      return;
-    }
-
-    // If "No Allergies" is already selected, clear it when selecting others
-    if (selectedAllergies.includes("none")) {
-      setSelectedAllergies([allergyId]);
-      return;
-    }
-
-    if (selectedAllergies.includes(allergyId)) {
-      setSelectedAllergies(selectedAllergies.filter((id) => id !== allergyId));
-    } else {
-      setSelectedAllergies([...selectedAllergies, allergyId]);
-    }
-  };
-
+  const [allergyIngredients, setAllergyIngredients] = useState<string>("");
+  const [otherRestrictions, setOtherRestrictions] = useState<string>("");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedAllergies.length === 0) return;
+    if (!allergyIngredients.trim() && !otherRestrictions.trim()) return;
 
     // Store allergies in session storage
     const userPreferences = JSON.parse(
@@ -61,7 +24,8 @@ export default function FoodAllergiesPage() {
       "userPreferences",
       JSON.stringify({
         ...userPreferences,
-        allergies: selectedAllergies,
+        allergyIngredients: allergyIngredients.trim(),
+        otherRestrictions: otherRestrictions.trim(),
       })
     );
 
@@ -73,7 +37,6 @@ export default function FoodAllergiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
         <StepIndicator
           currentStep={6}
@@ -94,47 +57,48 @@ export default function FoodAllergiesPage() {
           <CardContent>
             <p className="text-center text-gray-600 mb-6">
               We&apos;ll help you avoid these ingredients
-            </p>
-
+            </p>{" "}
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-2 gap-3">
-                {allergiesOptions.map((allergy) => (
-                  <div
-                    key={allergy.id}
-                    onClick={() => toggleAllergy(allergy.id)}
-                    className={`
-                      p-4 rounded-lg cursor-pointer transition-all border-2 flex items-center
-                      ${allergy.id === "none" ? "col-span-2" : ""}
-                      ${
-                        selectedAllergies.includes(allergy.id)
-                          ? "border-[#004743] bg-[#004743]/10"
-                          : "border-gray-200 hover:border-gray-300"
-                      }
-                    `}
+              <div className="space-y-4">
+                <div>
+                  <Label
+                    htmlFor="allergyIngredients"
+                    className="text-sm font-medium text-gray-700 mb-2 block"
                   >
-                    <div
-                      className={`
-                      w-5 h-5 rounded-sm border-2 mr-3 flex items-center justify-center flex-shrink-0
-                      ${
-                        selectedAllergies.includes(allergy.id)
-                          ? "border-[#004743] bg-[#004743]"
-                          : "border-gray-400"
-                      }
-                    `}
-                    >
-                      {selectedAllergies.includes(allergy.id) && (
-                        <Check className="w-3 h-3 text-white" />
-                      )}
-                    </div>
-                    <span className="text-md">{allergy.label}</span>
-                  </div>
-                ))}
+                    What are those ingredients?
+                  </Label>
+                  <Textarea
+                    id="allergyIngredients"
+                    value={allergyIngredients}
+                    onChange={(e) => setAllergyIngredients(e.target.value)}
+                    placeholder="List any ingredients you're allergic to (e.g., peanuts, dairy, shellfish...)"
+                    className="min-h-[100px] resize-none border-gray-300 focus:border-[#004743] focus:ring-[#004743]"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="otherRestrictions"
+                    className="text-sm font-medium text-gray-700 mb-2 block"
+                  >
+                    Any other food restrictions you have?
+                  </Label>
+                  <Textarea
+                    id="otherRestrictions"
+                    value={otherRestrictions}
+                    onChange={(e) => setOtherRestrictions(e.target.value)}
+                    placeholder="Any other dietary restrictions or preferences (e.g., vegetarian, low sodium, religious restrictions...)"
+                    className="min-h-[100px] resize-none border-gray-300 focus:border-[#004743] focus:ring-[#004743]"
+                  />
+                </div>
               </div>
 
               <Button
                 type="submit"
-                disabled={selectedAllergies.length === 0}
-                className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] mt-6"
+                disabled={
+                  !allergyIngredients.trim() && !otherRestrictions.trim()
+                }
+                className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 Continue
                 <ChevronRight className="w-5 h-5 ml-2" />
@@ -143,6 +107,5 @@ export default function FoodAllergiesPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
   );
 }
