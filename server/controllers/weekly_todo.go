@@ -23,37 +23,31 @@ func NewWeeklyTodoController() (*WeeklyTodoController, error) {
 	}, nil
 }
 
-// GenerateWeeklyTodo handles the request to generate a new weekly todo list
 func (c *WeeklyTodoController) GenerateWeeklyTodo(ctx *gin.Context) {
-	// Get user ID from context (set by auth middleware)
 	userID := ctx.GetString("userID")
 	if userID == "" {
 		utils.SendErrorResponse(ctx, http.StatusUnauthorized, "User not authenticated", "")
 		return
 	}
 
-	// Parse request body
 	var request models.WeeklyTodoRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		utils.SendErrorResponse(ctx, http.StatusBadRequest, "Invalid request body", err.Error())
 		return
 	}
 
-	// Generate the weekly todo using user data from database
 	weeklyTodo, err := c.weeklyTodoService.GenerateWeeklyTodo(userID, request.GenerateNewWeek)
 	if err != nil {
 		utils.SendErrorResponse(ctx, http.StatusInternalServerError, "Failed to generate weekly todo", err.Error())
 		return
 	}
 
-	// Save the weekly todo to database
 	err = c.weeklyTodoService.SaveWeeklyTodo(weeklyTodo)
 	if err != nil {
 		utils.SendErrorResponse(ctx, http.StatusInternalServerError, "Failed to save weekly todo", err.Error())
 		return
 	}
 
-	// Create response
 	response := models.WeeklyTodoResponse{
 		Success: true,
 		Message: "Weekly todo list generated and saved successfully",
@@ -63,7 +57,6 @@ func (c *WeeklyTodoController) GenerateWeeklyTodo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
-// GetWeeklyTodo retrieves a specific weekly todo
 func (c *WeeklyTodoController) GetWeeklyTodo(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
 	if userID == "" {
@@ -83,7 +76,6 @@ func (c *WeeklyTodoController) GetWeeklyTodo(ctx *gin.Context) {
 		return
 	}
 
-	// Verify the weekly todo belongs to the authenticated user
 	if weeklyTodo.UserID.Hex() != userID {
 		utils.SendErrorResponse(ctx, http.StatusForbidden, "Access denied", "This weekly todo does not belong to you")
 		return
@@ -96,7 +88,6 @@ func (c *WeeklyTodoController) GetWeeklyTodo(ctx *gin.Context) {
 	})
 }
 
-// GetUserWeeklyTodos retrieves all weekly todos for the authenticated user
 func (c *WeeklyTodoController) GetUserWeeklyTodos(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
 	if userID == "" {
@@ -117,7 +108,6 @@ func (c *WeeklyTodoController) GetUserWeeklyTodos(ctx *gin.Context) {
 	})
 }
 
-// GetCurrentWeekTodo retrieves the current active week todo for the user
 func (c *WeeklyTodoController) GetCurrentWeekTodo(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
 	if userID == "" {
@@ -138,7 +128,6 @@ func (c *WeeklyTodoController) GetCurrentWeekTodo(ctx *gin.Context) {
 	})
 }
 
-// UpdateTodoItem updates a specific todo item
 func (c *WeeklyTodoController) UpdateTodoItem(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
 	if userID == "" {
@@ -164,7 +153,6 @@ func (c *WeeklyTodoController) UpdateTodoItem(ctx *gin.Context) {
 		return
 	}
 
-	// Verify the weekly todo belongs to the authenticated user
 	weeklyTodo, err := c.weeklyTodoService.GetWeeklyTodo(todoID)
 	if err != nil {
 		utils.SendErrorResponse(ctx, http.StatusNotFound, "Weekly todo not found", err.Error())
@@ -176,7 +164,6 @@ func (c *WeeklyTodoController) UpdateTodoItem(ctx *gin.Context) {
 		return
 	}
 
-	// Update the todo item
 	err = c.weeklyTodoService.UpdateTodoItem(todoID, itemID, updateRequest)
 	if err != nil {
 		utils.SendErrorResponse(ctx, http.StatusInternalServerError, "Failed to update todo item", err.Error())
@@ -189,7 +176,6 @@ func (c *WeeklyTodoController) UpdateTodoItem(ctx *gin.Context) {
 	})
 }
 
-// GenerateWeeklyAnalysis generates analysis for a completed week
 func (c *WeeklyTodoController) GenerateWeeklyAnalysis(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
 	if userID == "" {
@@ -203,7 +189,6 @@ func (c *WeeklyTodoController) GenerateWeeklyAnalysis(ctx *gin.Context) {
 		return
 	}
 
-	// Verify the weekly todo belongs to the authenticated user
 	weeklyTodo, err := c.weeklyTodoService.GetWeeklyTodo(todoID)
 	if err != nil {
 		utils.SendErrorResponse(ctx, http.StatusNotFound, "Weekly todo not found", err.Error())
@@ -215,14 +200,12 @@ func (c *WeeklyTodoController) GenerateWeeklyAnalysis(ctx *gin.Context) {
 		return
 	}
 
-	// Generate the analysis
 	analysis, err := c.weeklyTodoService.GenerateWeeklyAnalysis(todoID)
 	if err != nil {
 		utils.SendErrorResponse(ctx, http.StatusInternalServerError, "Failed to generate weekly analysis", err.Error())
 		return
 	}
 
-	// Create response
 	response := models.WeeklyAnalysisResponse{
 		Success: true,
 		Message: "Weekly analysis generated successfully",
@@ -232,7 +215,6 @@ func (c *WeeklyTodoController) GenerateWeeklyAnalysis(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
-// TestUserExists is a temporary endpoint to debug user authentication
 func (c *WeeklyTodoController) TestUserExists(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
 	if userID == "" {
@@ -240,7 +222,6 @@ func (c *WeeklyTodoController) TestUserExists(ctx *gin.Context) {
 		return
 	}
 
-	// Try to get user data
 	user, err := services.GetUserByID(userID)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{

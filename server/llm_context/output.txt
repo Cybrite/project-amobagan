@@ -11,54 +11,65 @@ VISUAL FORMATTING RULES
 
 
 OUTPUT TEMPLATE STRUCTURE
+
 <div class="streaming-container">
             <div class="product-header">
                 <h1 class="product-title">[PRODUCT_NAME]</h1>
-            </div>
-
-            <div class="product-content">
-                <div class="product-visual">
-                    <div class="product-image" style="flex: 0 0 200px; max-width: 200px; max-height: 200px;">
-                        <img
-                            src="product_image"
-                            alt="Product Image"
+                <div class="product-visual-container">
+                    <div class="product-visual">
+                        <div
+                            class="product-image"
                             style="
-                                height: 100%;
-                                width: 100%;
-                                object-fit: cover;
-                                border-radius: 8px;
+                                flex: 0 0 200px;
                                 max-width: 200px;
                                 max-height: 200px;
                             "
-                        />
-                    </div>
-
-                    <div class="nutri-score-card">
-                        <div class="nutri-score-label">NUTRI-SCORE</div>
-                        <div class="nutri-score-grades">
-                            <span class="grade grade-a">A</span>
-                            <span class="grade grade-b">B</span>
-                            <span class="grade grade-c">C</span>
-                            <span class="grade grade-d highlighted-grade">D</span>
-                            [ACTUAL_GRADE_HIGHLIGHTED]
-                        </div>
-                        <div class="critical-warning">Critical!</div>
-                    </div>
-                </div>
-
-                <div class="recommendation-section">
-                    <div class="recommendation-text">
-                        This Product Is
-                        <span class="recommendation-highlight"
-                            >Strictly Not Recommended</span
                         >
-                        For You
+                            <img
+                                src="procuct_image"
+                                alt="Product Image"
+                                style="
+                                    height: 100%;
+                                    width: 100%;
+                                    object-fit: cover;
+                                    border-radius: 8px;
+                                    max-width: 200px;
+                                    max-height: 200px;
+                                "
+                            />
+                        </div>
+
+                        <div class="nutri-score-card">
+                            <div class="nutri-score-label">NUTRI-SCORE</div>
+                            <div class="nutri-score-grades">
+                                <span class="grade grade-a">A</span>
+                                <span class="grade grade-b">B</span>
+                                <span class="grade grade-c">C</span>
+                                <span class="grade grade-d highlighted-grade"
+                                    >D</span
+                                >
+                                [ACTUAL_GRADE_HIGHLIGHTED]
+                            </div>
+                            <div class="critical-warning">Critical!</div>
+                        </div>
                     </div>
-                    <div class="recommendation-text">
-                        <strong>Based On Your Goals And Preferences</strong>
+
+                    <div class="recommendation-section">
+                        <div class="recommendation-text">
+                            This Product Is
+                            <span class="recommendation-highlight"
+                                >Strictly Not Recommended</span
+                            >
+                            For You
+                        </div>
+                        <div class="recommendation-text">
+                            <strong>Based On Your Goals And Preferences</strong>
+                        </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="product-content">
                 <div class="reasons-section">
                     <div class="reasons-title">
                         We Don't Recommend This Product For You Because It Has:
@@ -106,26 +117,28 @@ OUTPUT TEMPLATE STRUCTURE
                         <span class="reason-icon">❌[APPROPIRATE ICON]</span>
                         <div class="reason-text">
                             <strong>High in Saturated Fat And Calories</strong>,
-                            Conflicting With Weight Loss Goals.[APPROPIRATE REASON]
+                            Conflicting With Weight Loss Goals.[APPROPIRATE
+                            REASON]
                         </div>
                     </div>
 
                     <div class="reasons-title">
-                       How long will it take me to achieve my health goal?
+                        How long will it take me to achieve my health goal?
                     </div>
 
                     <div class="reason-item">
                         <span class="reason-icon">❌[APPROPIRATE ICON]</span>
                         <div class="reason-text">
-                            <strong>Due to [SPECIFIC REASONS]</strong>,
-                           it mught happen that your health goals might get delayed a bit or might happen that you might not also achieve your goals[APPROPIRATE REASON]
+                            <strong>Due to [SPECIFIC REASONS]</strong>, it mught
+                            happen that your health goals might get delayed a
+                            bit or might happen that you might not also achieve
+                            your goals[APPROPIRATE REASON]
                         </div>
                     </div>
-                    
                 </div>
 
                 <div class="nutrition-facts">
-                    <div class="nutrition-header">Nutrition Facts</div>
+                    <!-- <div class="nutrition-header">Nutrition Facts</div> -->
 
                     <div class="nutrition-row">
                         <span class="nutrition-label">Serving Size</span>
@@ -151,21 +164,21 @@ OUTPUT TEMPLATE STRUCTURE
                 </div>
 
                 <div id="transcript_summary">
-                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST IN HINDI]
+                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST IN
+                    HINDI]
                 </div>
 
-                <div id="nutritionalInfos" style="display:none;">
-                [
-                    LIST ANY NUTRITIONAL ELEMENTS THAT CONFLICT WITH USER'S PRIORITIES.
-                    ONLY INCLUDE ELEMENTS THAT ARE MISSING OR INSUFFICIENT.
-                    EXAMPLE: If user priorities are "Protein, Fiber, Vitamins" and product lacks fiber, list only "Fiber".
-                    ONLY NAME NO DESCRIPTION
-                    THE FORMAT IS THIS element1,element2 AS TEXT
-                ]
+                <div id="nutritionalInfos" style="display: none">
+                    [ LIST ANY NUTRITIONAL ELEMENTS THAT CONFLICT WITH USER'S
+                    PRIORITIES. ONLY INCLUDE ELEMENTS THAT ARE MISSING OR
+                    INSUFFICIENT. EXAMPLE: If user priorities are "Protein,
+                    Fiber, Vitamins" and product lacks fiber, list only "Fiber".
+                    ONLY NAME NO DESCRIPTION THE FORMAT IS THIS
+                    element1,element2 AS TEXT ]
                 </div>
-
             </div>
         </div>
+
 
 IMPLEMENTATION INSTRUCTIONS FOR LLM:
 

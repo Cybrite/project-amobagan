@@ -1,10 +1,25 @@
+body {
+    background-color: #f0ede4;
+}
+
 .streaming-container {
     max-width: 600px;
     margin: 0 auto;
     /* background: #ffffff; */
     /* border-radius: 16px; */
     /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     overflow: hidden;
+    background-color: #f0ede4;
+    /* padding: 20px; */
+}
+
+.product-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 #transcript_summary {
@@ -12,7 +27,9 @@
 }
 
 .product-header {
-    padding: 24px;
+    border-radius: 0.5rem;
+    background: #fffdf3;
+    box-shadow: 0px 0px 8.6px -5px rgba(0, 0, 0, 0.25);
 }
 .product-title {
     font-size: 20px;
@@ -24,15 +41,12 @@
     letter-spacing: 0.5px;
     text-align: center;
     width: 100%;
-}
-
-.product-content {
-    padding: 24px;
+    padding-top: 20px;
 }
 
 .product-visual {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     margin-bottom: 24px;
     align-items: center;
     justify-content: center;
@@ -67,6 +81,7 @@
     box-shadow: 0 4px 12px rgba(202, 65, 49, 0.1);
     min-width: 200px;
     text-align: center;
+    margin-top: 40px;
 }
 .nutri-score-label {
     font-size: 12px;
@@ -119,10 +134,7 @@
     margin-top: 8px;
 }
 .recommendation-section {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
+    padding: 10px;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -140,7 +152,11 @@
 }
 
 .reasons-section {
-    margin-bottom: 20px;
+    padding: 2cap;
+    border-radius: 0.5rem;
+    background: #fffdf3;
+
+    box-shadow: 0px 1px 14px -5px rgba(0, 0, 0, 0.25);
 }
 
 .reasons-title {
@@ -154,11 +170,7 @@
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    margin-bottom: 12px;
-    padding: 12px;
-    background: #ffffff;
-    border-radius: 6px;
-    border: 1px solid #f0f0f0;
+    padding: 10px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -179,10 +191,10 @@
 }
 
 .nutrition-facts {
-    background: #ffffff;
+    /* background: #ffffff;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
     overflow: hidden;
 }
 
@@ -201,8 +213,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 20px;
-    border-bottom: 1px solid #e0e0e0;
+    background-color: #fff;
     transition: background-color 0.2s ease;
+    margin-top: 2px;
+    padding: 15px;
+    /* border-radius: 0.5rem; */
 }
 
 .nutrition-row:hover {
@@ -247,19 +262,15 @@
         font-size: 18px;
     }
 
-    .product-content {
-        padding: 20px 16px;
-    }
-
     .product-visual {
-        flex-direction: column;
-        gap: 16px;
+        gap: 10px;
     }
 
     .product-image img {
         width: 100%;
         max-width: 280px;
         height: 180px;
+        padding: 10px;
     }
 
     .nutri-score-card {
@@ -269,10 +280,19 @@
     }
 
     .nutrition-row {
-        padding: 10px 16px;
+        padding: 20px 16px;
     }
 
     .nutrition-header {
         padding: 12px 16px;
     }
+}
+
+.product-visual-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
 }
