@@ -18,17 +18,22 @@ interface StreamMessage {
 
 interface NutritionStreamingProps {
     onAnalysisComplete?: (analysis: string) => void;
+    onStreamingStart?: () => void;
+    onFirstStreamChunk?: () => void;
     initialBarcode?: string;
 }
 
 export function NutritionStreaming({
     onAnalysisComplete,
+    onStreamingStart,
+    onFirstStreamChunk,
     initialBarcode,
 }: NutritionStreamingProps) {
     const [barcode, setBarcode] = useState(initialBarcode || "");
     const [isConnected, setIsConnected] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [currentAnalysis, setCurrentAnalysis] = useState("");
+    const [hasReceivedFirstChunk, setHasReceivedFirstChunk] = useState(false);
     const wsRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
@@ -73,6 +78,10 @@ export function NutritionStreaming({
             console.log(message);
             if (message.type === "stream_chunk") {
                 setCurrentAnalysis((prev) => prev + message.content);
+                if (!hasReceivedFirstChunk) {
+                    setHasReceivedFirstChunk(true);
+                    onFirstStreamChunk?.();
+                }
             } else if (message.type === "stream_complete") {
                 setIsStreaming(false);
                 setCurrentAnalysis(message.content);
@@ -115,6 +124,7 @@ export function NutritionStreaming({
         }
 
         setIsStreaming(true);
+        onStreamingStart?.();
         setCurrentAnalysis("");
 
         const request = {

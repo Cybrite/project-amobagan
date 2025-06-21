@@ -15,32 +15,42 @@ import {
 export default function StreamingPage() {
     const searchParams = useSearchParams();
     const [barcode, setBarcode] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         // Extract barcode from URL query parameter
         const barcodeParam = searchParams.get("barcode");
         if (barcodeParam) {
             setBarcode(barcodeParam);
+            setIsLoading(true);
             console.log("Extracted barcode from URL:", barcodeParam);
         }
     }, [searchParams]);
 
+    const handleFirstStreamChunk = () => {
+        setIsLoading(false);
+    };
+
     return (
         <div className="min-h-screen">
             <div>
-                {/* Commented out for automatic mode - might need later
-                {barcode && (
-                    <div className="mb-4 text-center">
-                        <p className="text-lg text-gray-600">
-                            Analyzing barcode:{" "}
-                            <span className="font-mono font-bold text-blue-600">
-                                {barcode}
-                            </span>
-                        </p>
+                {isLoading && barcode && (
+                    <div className="flex items-center justify-center min-h-[200px]">
+                        <div className="text-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                            <p className="text-lg text-gray-600 font-medium">
+                                Something is cooking...
+                            </p>
+                            <p className="text-sm text-gray-500 mt-2">
+                                Analyzing your product's nutrition information
+                            </p>
+                        </div>
                     </div>
                 )}
-                */}
-                <NutritionStreaming initialBarcode={barcode} />
+                <NutritionStreaming
+                    initialBarcode={barcode}
+                    onFirstStreamChunk={handleFirstStreamChunk}
+                />
             </div>
         </div>
     );
