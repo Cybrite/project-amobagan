@@ -8,18 +8,18 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const carouselItems = [
   {
-    title: "Scan & Learn",
+    title: "Personalized Product Nutri-Score",
     description:
-      "Quickly scan any product barcode to instantly see its nutritional value and health impact",
+      "Scan the product QR to show Nutri score between A to E based on my personal preferences",
     image:
-      "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750475065/scan_icon_nryb5e.png",
+      "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750527766/Frame_2610294_exiv54.png",
   },
   {
-    title: "Personalized Insights",
+    title: "Personalized to-dos",
     description:
-      "Get recommendations tailored to your specific health goals and dietary preferences",
+      "Generate personalized to-dos based on the health goals and based on the Gemini analysis of the scanned product Barcode.",
     image:
-      "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750475065/insights_icon_fkc8se.png",
+      "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750527851/Frame_2610382_jp5u28.png",
   },
   {
     title: "Make Better Choices",
