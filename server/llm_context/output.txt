@@ -149,6 +149,10 @@ OUTPUT TEMPLATE STRUCTURE
                         <span class="nutrition-value value-high">3g</span>
                     </div>
                 </div>
+
+                <div id="transcript_summary">
+                    [2 TO 3 LINE OS SUMMARY TRANSCRIPT AS A AI NUTRITIONIST]
+                </div>
             </div>
         </div>
 

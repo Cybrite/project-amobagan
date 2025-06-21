@@ -9,11 +9,13 @@ type User struct {
 	FullName           string             `json:"fullName" bson:"fullName" binding:"required"`
 	PhoneNo            string             `json:"phoneNo" bson:"phoneNo" binding:"required,min=10,max=10"`
 	Password           string             `json:"password" bson:"password" binding:"required,min=6"`
-	PetraWalletAddress string             `json:"petraWalletAddress" bson:"petraWalletAddress"`
-	PetraPublicKey     string             `json:"petraPublicKey" bson:"petraPublicKey"`
 	HealthStatus       string             `json:"healthStatus" bson:"healthStatus"`
-	Role               string             `json:"role" bson:"role" binding:"required,oneof=admin vendor user"`
 	HealthGoals        []string  `json:"healthGoals" bson:"healthGoals"`
 	DietaryPreferences []string  `json:"dietaryPreferences" bson:"dietaryPreferences"`
 	NutritionPriorities []string  `json:"nutritionPriorities" bson:"nutritionPriorities"`
+	WorkOutsPerWeek     string              `json:"workOutsPerWeek" bson:"workOutsPerWeek"`
+	Age                string              `json:"age" bson:"age"`
+	Height             string              `json:"height" bson:"height"`
+	Weight             string              `json:"weight" bson:"weight"`
+	
 }

@@ -16,9 +16,10 @@ func GenerateJWT(user models.User) (string, error) {
 		"userId": user.ID.Hex(),
 		"fullName": user.FullName,
 		"phoneNo": user.PhoneNo,
-		"petraWalletAddress": user.PetraWalletAddress,
-		"petraPublicKey": user.PetraPublicKey,
-		"role": user.Role,
+		"workOutsPerWeek": user.WorkOutsPerWeek,
+		"age": user.Age,
+		"height": user.Height,
+		"weight": user.Weight,
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	}
 
