@@ -4,9 +4,6 @@ import React, {
   useState,
 } from 'react';
 
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -64,7 +61,7 @@ export function NutritionStreaming({
 
         ws.onmessage = (event) => {
             const message: StreamMessage = JSON.parse(event.data);
-
+            console.log(message);
             if (message.type === "stream_chunk") {
                 setCurrentAnalysis((prev) => prev + message.content);
             } else if (message.type === "stream_complete") {
@@ -124,7 +121,7 @@ export function NutritionStreaming({
     }, []);
 
     return (
-        <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <div className="max-w-4xl mx-auto p-6 space-y-6 font-inter">
             <Card>
                 <CardHeader>
                     <CardTitle>Nutrition Analysis Streaming</CardTitle>
@@ -171,73 +168,175 @@ export function NutritionStreaming({
 
             {/* Analysis Output */}
             {currentAnalysis && (
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Analysis Results</CardTitle>
-                    </CardHeader>
+                <Card className="bg-[#f0ede4]">
                     <CardContent>
-                        <div className="prose prose-sm max-w-none">
-                            <ReactMarkdown
+                        <div
+                            className="prose prose-sm w-full"
+                            dangerouslySetInnerHTML={{
+                                __html: currentAnalysis,
+                            }}
+                        >
+                            {/* <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
+                                // Remove rehypePlugins={[rehypeRaw]} - not needed anymore
                                 components={{
                                     h1: ({ children }) => (
-                                        <h1 className="text-2xl font-bold mb-4">
+                                        <h1 className="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">
                                             {children}
                                         </h1>
                                     ),
-                                    h2: ({ children }) => (
-                                        <h2 className="text-xl font-semibold mb-3">
-                                            {children}
-                                        </h2>
-                                    ),
+                                    h2: ({ children }) => {
+                                        const text = children?.toString() || "";
+                                        if (text.includes("NUTRI-SCORE")) {
+                                            return (
+                                                <h2 className="text-xl font-semibold mb-3 text-center">
+                                                    {children}
+                                                </h2>
+                                            );
+                                        }
+                                        return (
+                                            <h2 className="text-xl font-semibold mb-3 text-gray-700">
+                                                {children}
+                                            </h2>
+                                        );
+                                    },
                                     h3: ({ children }) => (
-                                        <h3 className="text-lg font-semibold mb-2">
+                                        <h3 className="text-lg font-semibold mb-2 text-gray-700">
                                             {children}
                                         </h3>
                                     ),
                                     p: ({ children }) => (
-                                        <p className="mb-4">{children}</p>
+                                        <p className="mb-4 text-gray-700 leading-relaxed">
+                                            {children}
+                                        </p>
                                     ),
+                                    blockquote: ({ children }) => {
+                                        const text = children?.toString() || "";
+                                        if (
+                                            text.includes("Critical") ||
+                                            text.includes("Not Recommended")
+                                        ) {
+                                            return (
+                                                <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-r-lg">
+                                                    <div className="text-red-700 font-semibold">
+                                                        {children}
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                        if (text.includes("Grade:")) {
+                                            return (
+                                                <div className="bg-white border-2 border-red-400 p-4 mb-4 rounded-lg text-center">
+                                                    <div className="text-gray-800">
+                                                        {children}
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                        return (
+                                            <blockquote className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4 rounded-r-lg">
+                                                <div className="text-blue-800">
+                                                    {children}
+                                                </div>
+                                            </blockquote>
+                                        );
+                                    },
                                     ul: ({ children }) => (
-                                        <ul className="list-disc list-inside mb-4">
+                                        <ul className="space-y-2 mb-4">
                                             {children}
                                         </ul>
                                     ),
-                                    ol: ({ children }) => (
-                                        <ol className="list-decimal list-inside mb-4">
+                                    li: ({ children }) => {
+                                        const text = children?.toString() || "";
+                                        if (text.includes("❌")) {
+                                            return (
+                                                <li className="flex items-start space-x-2 p-2 bg-red-50 rounded-md">
+                                                    <span className="text-red-600 font-medium">
+                                                        {children}
+                                                    </span>
+                                                </li>
+                                            );
+                                        }
+                                        if (text.includes("✅")) {
+                                            return (
+                                                <li className="flex items-start space-x-2 p-2 bg-green-50 rounded-md">
+                                                    <span className="text-green-700 font-medium">
+                                                        {children}
+                                                    </span>
+                                                </li>
+                                            );
+                                        }
+                                        return (
+                                            <li className="mb-1 text-gray-700">
+                                                {children}
+                                            </li>
+                                        );
+                                    },
+                                    table: ({ children }) => (
+                                        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4 shadow-sm">
+                                            <table className="w-full">
+                                                {children}
+                                            </table>
+                                        </div>
+                                    ),
+                                    thead: ({ children }) => (
+                                        <thead className="bg-gray-50">
                                             {children}
-                                        </ol>
+                                        </thead>
                                     ),
-                                    li: ({ children }) => (
-                                        <li className="mb-1">{children}</li>
-                                    ),
-                                    strong: ({ children }) => (
-                                        <strong className="font-semibold">
+                                    th: ({ children }) => (
+                                        <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">
                                             {children}
-                                        </strong>
+                                        </th>
                                     ),
-                                    em: ({ children }) => (
-                                        <em className="italic">{children}</em>
-                                    ),
-                                    code: ({ children }) => (
-                                        <code className="bg-gray-100 px-1 py-0.5 rounded text-sm">
-                                            {children}
-                                        </code>
-                                    ),
-                                    pre: ({ children }) => (
-                                        <pre className="bg-gray-100 p-4 rounded mb-4 overflow-x-auto">
-                                            {children}
-                                        </pre>
-                                    ),
-                                    blockquote: ({ children }) => (
-                                        <blockquote className="border-l-4 border-gray-300 pl-4 italic mb-4">
-                                            {children}
-                                        </blockquote>
+                                    td: ({ children }) => {
+                                        const text = children?.toString() || "";
+                                        if (text.includes("🔴")) {
+                                            return (
+                                                <td className="px-4 py-3 border-b border-gray-100 text-red-600 font-semibold">
+                                                    {children}
+                                                </td>
+                                            );
+                                        }
+                                        return (
+                                            <td className="px-4 py-3 border-b border-gray-100 text-gray-700">
+                                                {children}
+                                            </td>
+                                        );
+                                    },
+                                    strong: ({ children }) => {
+                                        const text = children?.toString() || "";
+                                        if (
+                                            text.includes("E") ||
+                                            text.includes("Critical") ||
+                                            text.includes("Not Recommended")
+                                        ) {
+                                            return (
+                                                <strong className="text-red-600 font-bold">
+                                                    {children}
+                                                </strong>
+                                            );
+                                        }
+                                        if (text.includes("Grade:")) {
+                                            return (
+                                                <strong className="text-lg font-bold text-gray-800">
+                                                    {children}
+                                                </strong>
+                                            );
+                                        }
+                                        return (
+                                            <strong className="font-semibold text-gray-800">
+                                                {children}
+                                            </strong>
+                                        );
+                                    },
+                                    hr: () => (
+                                        <hr className="my-6 border-gray-200" />
                                     ),
                                 }}
                             >
                                 {currentAnalysis}
-                            </ReactMarkdown>
+                            </ReactMarkdown> */}
                         </div>
                     </CardContent>
                 </Card>
