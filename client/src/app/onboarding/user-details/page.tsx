@@ -29,12 +29,6 @@ export default function UserDetailsPage() {
   return (
     <div className="min-h-screen bg-[#F0EDE4] flex flex-col items-center justify-center p-4">
       <div className="relative w-full max-w-md">
-        <StepIndicator
-          currentStep={1}
-          totalSteps={8}
-          variant="light"
-          className="mb-6"
-        />
 
         <Card className="bg-[#F0EDE4]">
           <CardHeader className="text-center space-y-4">
