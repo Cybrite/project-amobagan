@@ -17,10 +17,8 @@ const StepIndicator = ({
 }: StepIndicatorProps) => {
   const progressPercentage = (currentStep / totalSteps) * 100;
   const isDark = variant === "dark";
-
   return (
     <div className={`space-y-4 mb-8 ${className}`}>
-      {/* Back Navigation - Separate from progress indicator */}
       {onBack && showBackButton && currentStep > 1 && (
         <div className="flex justify-start">
           <button
@@ -50,33 +48,30 @@ const StepIndicator = ({
           </button>
         </div>
       )}
-
-      {/* Progress Indicator - Clean and centered */}
       <div className="flex items-center justify-center">
-        <div className="relative w-full max-w-80 h-3 bg-gray-200 rounded-full overflow-hidden">
+        <div className="relative w-full max-w-80">
           <div
-            className="absolute top-0 left-0 h-full transition-all duration-500 ease-out bg-[#004743] rounded-full"
+            className="absolute -top-2.5 transform -translate-x-1/2 transition-all duration-500 ease-out z-10"
             style={{
-              width: `${progressPercentage}%`,
-            }}
-          />
-
-          <div
-            className="absolute top-1/2 transform -translate-y-1/2 w-6 h-6 bg-[#004743] rounded-full flex items-center justify-center transition-all duration-500 ease-out shadow-lg border-2 border-white"
-            style={{
-              left: `calc(${progressPercentage}% - 12px)`,
+              left: `${progressPercentage}%`,
             }}
           >
             <img
               src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750475065/Vector_ug5wsz.png"
-              alt="progress indicator"
-              className="w-3 h-3"
+              alt="Progress indicator"
+              className="w-6 h-6"
+            />
+          </div>
+          <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="absolute top-0 left-0 h-full transition-all duration-500 ease-out bg-[#004743] rounded-full"
+              style={{
+                width: `${progressPercentage}%`,
+              }}
             />
           </div>
         </div>
       </div>
-
-      {/* Step counter */}
       <div
         className={`text-center text-sm ${
           isDark ? "text-white/60" : "text-gray-500"
