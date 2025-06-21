@@ -9,13 +9,9 @@ export default function StreamingPage() {
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="container mx-auto">
                 <h1 className="text-3xl font-bold text-center mb-8">
-                    Nutrition Analysis Streaming Demo
+                    Nutrition Analysis Streaming
                 </h1>
-                <NutritionStreaming
-                    onAnalysisComplete={(analysis) => {
-                        console.log("Analysis completed:", analysis);
-                    }}
-                />
+                <NutritionStreaming />
             </div>
         </div>
     );
