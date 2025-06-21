@@ -19,4 +19,6 @@ func setupApiRoutes(router *gin.Engine) {
 	api := router.Group("/api")
 	setupUserRoutes(api)
 	setupProductRoutes(api)
+	setupDietPlanRoutes(api)
+	setupWeeklyTodoRoutes(api)
 }
