@@ -22,11 +22,11 @@ const carouselItems = [
       "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750527851/Frame_2610382_jp5u28.png",
   },
   {
-    title: "Make Better Choices",
+    title: "Track Your Nutrition Progress",
     description:
-      "Compare alternatives and find healthier options that match your nutrition priorities",
+      "Log the food you scan and get suggestions and warnings based on your selected parameters.",
     image:
-      "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750475065/choices_icon_vyh8fw.png",
+      "https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750528235/Group_5_nmzptc.png",
   },
 ];
 
@@ -100,8 +100,6 @@ export default function CarouselPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
-
       <motion.div
         className="relative w-full max-w-md"
         initial={{ opacity: 0 }}
@@ -111,25 +109,6 @@ export default function CarouselPage() {
         {" "}
         <Card className="bg-[#F0EDE4] overflow-hidden shadow-xl">
           <CardContent className="p-8 flex flex-col items-center">
-            <motion.div
-              className="flex w-full justify-between mb-6"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              {Array.from({ length: carouselItems.length }).map((_, index) => (
-                <motion.div
-                  key={index}
-                  className={`h-1 flex-1 mx-1 rounded-full transition-all duration-500 ${
-                    currentIndex === index ? "bg-[#004743]" : "bg-gray-300"
-                  }`}
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                />
-              ))}
-            </motion.div>
-
             <div className="py-12 px-4 text-center min-h-[300px] flex items-center justify-center">
               <AnimatePresence mode="wait">
                 {carouselItems.map(
@@ -149,7 +128,7 @@ export default function CarouselPage() {
                         className="w-full"
                       >
                         <motion.div
-                          className="flex justify-center mb-8"
+                          className="flex justify-center mb-4"
                           initial={{ scale: 0, rotate: -90 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{
@@ -165,13 +144,12 @@ export default function CarouselPage() {
                               className="absolute inset-0 bg-[#004743]/10 rounded-full"
                               animate={{ scale: [1, 1.1, 1] }}
                               transition={{ duration: 2, repeat: Infinity }}
-                            />
-                            <Image
+                            />                            <Image
                               src={item.image}
                               alt={item.title}
-                              width={96}
-                              height={96}
-                              className="w-24 h-24 relative z-10"
+                              width={280}
+                              height={280}
+                              className="w-56 h-56 relative z-10"
                             />
                           </div>
                         </motion.div>
@@ -195,9 +173,31 @@ export default function CarouselPage() {
                         </motion.p>
                       </motion.div>
                     )
-                )}
+                )}{" "}
               </AnimatePresence>
             </div>
+
+            {/* Progress indicators as circles */}
+            <motion.div
+              className="flex justify-center space-x-2 mb-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              {carouselItems.map((_, index) => (
+                <motion.div
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    currentIndex === index
+                      ? "bg-[#004743] scale-110"
+                      : "bg-gray-300"
+                  }`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: currentIndex === index ? 1.1 : 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              ))}
+            </motion.div>
 
             <motion.div
               className="w-full"
