@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -13,6 +13,8 @@ import {
   Calendar,
   Clock,
   User,
+  Flame,
+  BellRing,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -63,26 +65,26 @@ export default function Component() {
           <p className="text-sm text-gray-600">Be Healthy!</p>
         </div>
         <div className="flex gap-2">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src="/placeholder.svg" />
-            <AvatarFallback className="bg-gray-300"></AvatarFallback>
-          </Avatar>
-          <Avatar className="w-10 h-10">
-            <AvatarImage src="/placeholder.svg" />
-            <AvatarFallback className="bg-gray-300"></AvatarFallback>
-          </Avatar>
+          <span className="mr-2">
+            <Flame />
+          </span>
+          <span className="mr-2">
+            <BellRing />
+          </span>
         </div>
       </div>
 
       {/* Calendar */}
-      <div className="px-4 mb-4">        <div className="flex justify-between items-center">
+      <div className="px-4 mb-4">
+        {" "}
+        <div className="flex justify-between items-center">
           {days.map((day, index) => (
             <div key={index} className="flex flex-col items-center">
               <span className="text-xs text-gray-500 mb-1">{day.day}</span>
               <div
                 className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium cursor-pointer transition-colors ${
                   day.active
-                    ? "border-2 border-blue-500 bg-white text-gray-900"
+                    ? "border-2 border-[#004743] bg-white text-gray-900"
                     : "text-gray-600 hover:bg-white hover:text-gray-900"
                 }`}
                 onClick={() => selectDay(index)}
