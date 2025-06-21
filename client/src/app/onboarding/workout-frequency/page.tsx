@@ -1,29 +1,32 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, Dumbbell } from "lucide-react";
+import { ChevronRight, Dumbbell, Weight, BicepsFlexed } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StepIndicator from "@/components/features/onboarding_flow/components/StepIndicator";
 
 const workoutOptions = [
   {
-    id: "everyday",
-    frequency: "7x",
-    label: "Every day",
-    description: "Maximum intensity training",
+    id: "0-2",
+    frequency: "0-2",
+    label: "0-2",
+    description: "Worksout now and then",
+    icon: Weight,
   },
   {
-    id: "4-6_week",
-    frequency: "4-6x",
-    label: "4-6 times a week",
-    description: "High intensity training",
+    id: "3-5",
+    frequency: "3-5",
+    label: "3-5",
+    description: "A few times in a week",
+    icon: Dumbbell,
   },
   {
-    id: "2-3_week",
-    frequency: "2-3x",
-    label: "2-3 times a week",
-    description: "Moderate training schedule",
+    id: "6+",
+    frequency: "6+",
+    label: "6+",
+    description: "Athelete",
+    icon: BicepsFlexed,
   },
 ];
 
@@ -88,20 +91,6 @@ export default function WorkoutFrequencyPage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div
-                        className={`
-                          w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center
-                          ${
-                            selectedFrequency === option.id
-                              ? "border-[#004743]"
-                              : "border-gray-400"
-                          }
-                        `}
-                      >
-                        {selectedFrequency === option.id && (
-                          <div className="w-3 h-3 rounded-full bg-[#004743]" />
-                        )}
-                      </div>
                       <div>
                         <div className="text-2xl font-bold text-[#004743]">
                           {option.frequency}
@@ -109,10 +98,9 @@ export default function WorkoutFrequencyPage() {
                         <div className="text-sm text-gray-600 mt-1">
                           {option.description}
                         </div>
-                      </div>
-                    </div>
+                      </div>                    </div>
                     <div className="flex items-center">
-                      <Dumbbell
+                      <option.icon
                         className={`w-6 h-6 ${
                           selectedFrequency === option.id
                             ? "text-[#004743]"
