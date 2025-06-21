@@ -2,12 +2,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserDetails } from "@/types/userflow";
-import { User, Phone, ChevronRight, Lock } from "lucide-react";
-
+import { User, Phone, Lock, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import StepIndicator from "@/components/features/onboarding_flow/components/StepIndicator";
 
 export default function UserDetailsPage() {
   const router = useRouter();
@@ -26,12 +26,16 @@ export default function UserDetailsPage() {
     // Navigate to next step
     router.push("/onboarding/workout-frequency");
   };
-
   return (
-    <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
-
+    <div className="min-h-screen bg-[#F0EDE4] flex flex-col items-center justify-center p-4">
       <div className="relative w-full max-w-md">
+        <StepIndicator
+          currentStep={1}
+          totalSteps={8}
+          variant="light"
+          className="mb-6"
+        />
+
         <Card className="bg-[#F0EDE4]">
           <CardHeader className="text-center space-y-4">
             <div>
@@ -116,7 +120,6 @@ export default function UserDetailsPage() {
                 className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] mt-4"
               >
                 Continue
-                <ChevronRight className="w-5 h-5 ml-2" />
               </Button>
             </form>
           </CardContent>
