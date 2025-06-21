@@ -23,23 +23,20 @@ const UserDetailsStep = ({
   setUserDetails,
   onSubmit,
 }: UserDetailsStepProps) => (
-  <Card className="bg-[#F0EDE4;]">
+  <Card className="bg-[#F0EDE4] ">
     <CardHeader className="text-center space-y-4">
       <div>
-        <CardTitle className="text-2xl font-bold bg-[#000] bg-clip-text text-transparent">
+        <CardTitle className="text-2xl flex font-bold bg-[#000] bg-clip-text text-transparent">
           Fill your Details
         </CardTitle>
-        <CardDescription className="text-gray-400 mt-2">
-          Let&apos;s get started by collecting some basic information
-        </CardDescription>
       </div>
     </CardHeader>
 
     <CardContent>
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className="space-y-4">
+        <div className="space-y-12">
           <div>
-            <Label htmlFor="name" className="text-gray-300 font-medium">
+            <Label htmlFor="name" className="text-black font-medium">
               Full Name *
             </Label>
             <div className="relative mt-2">
@@ -52,14 +49,14 @@ const UserDetailsStep = ({
                 onChange={(e) =>
                   setUserDetails({ ...userDetails, name: e.target.value })
                 }
-                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                className="pl-10 bg-[#FFFDF7] text-black placeholder:text-gray-500"
                 placeholder="Enter your full name"
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="phone" className="text-gray-300 font-medium">
+            <Label htmlFor="phone" className="text-black font-medium">
               Phone Number *
             </Label>
             <div className="relative mt-2">
@@ -72,14 +69,14 @@ const UserDetailsStep = ({
                 onChange={(e) =>
                   setUserDetails({ ...userDetails, phone: e.target.value })
                 }
-                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                className="pl-10 bg-[#FFFDF7] text-black placeholder:text-gray-500"
                 placeholder="Enter your phone number"
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="password" className="text-gray-300 font-medium">
+            <Label htmlFor="password" className="text-black font-medium">
               Password *
             </Label>
             <div className="relative mt-2">
@@ -92,7 +89,7 @@ const UserDetailsStep = ({
                 onChange={(e) =>
                   setUserDetails({ ...userDetails, password: e.target.value })
                 }
-                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20"
+                className="pl-10 bg-[#FFFDF7] text-black placeholder:text-gray-500"
                 placeholder="Enter your password"
               />
             </div>
@@ -101,7 +98,7 @@ const UserDetailsStep = ({
 
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02]"
+          className="w-full bg-[#004743] text-white font-medium py-3 transition-all duration-300 transform hover:scale-[1.02] mt-4"
         >
           Continue to Wallet Setup
           <ChevronRight className="w-5 h-5 ml-2" />
