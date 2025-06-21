@@ -1,13 +1,17 @@
 "use client";
-import { useState } from "react";
-import OnboardingFlow from "@/components/features/onboarding_flow/onboarding";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const [showOnboarding, setShowOnboarding] = useState(false);
+export default function LandingPage() {
+  const router = useRouter();
 
-  if (showOnboarding) {
-    return <OnboardingFlow />;
-  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/welcome");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
     <div
@@ -18,237 +22,55 @@ export default function Home() {
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      {/* Main Content */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          padding: "0 20px",
-          maxWidth: "100%",
-        }}
-      >
-        {/* Header Section */}
-        <div
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        <h1
           style={{
-            textAlign: "center",
-            marginTop: "40px",
-            marginBottom: "60px",
+            fontSize: "56px",
+            fontWeight: "700",
+            color: "#1a1a1a",
+            margin: "0 0 24px 0",
+            letterSpacing: "-1px",
+            lineHeight: "1.1",
           }}
         >
-          <h2
-            style={{
-              fontSize: "18px",
-              fontWeight: "400",
-              color: "#666",
-              margin: "0 0 8px 0",
-              letterSpacing: "0.3px",
-            }}
-          >
-            Welcome to
-          </h2>
-          <h1
-            style={{
-              fontSize: "48px",
-              fontWeight: "700",
-              color: "#1a1a1a",
-              margin: "0 0 24px 0",
-              letterSpacing: "-1px",
-              lineHeight: "1.1",
-            }}
-          >
-            NutriScan
-          </h1>
-          <p
-            style={{
-              fontSize: "16px",
-              fontWeight: "400",
-              color: "#666",
-              lineHeight: "1.5",
-              margin: "0",
-              maxWidth: "280px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            A Community driven initiative to let you make better food choices
-          </p>
-        </div>
-
-        {/* Placeholder Boxes Grid */}
-        <div
+          NutriScan
+        </h1>
+        <p
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gridTemplateRows: "1fr 1fr",
-            gap: "16px",
-            height: "320px",
-            marginBottom: "60px",
+            fontSize: "18px",
+            fontWeight: "400",
+            color: "#666",
+            lineHeight: "1.5",
+            margin: "0",
+            maxWidth: "320px",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
-          {/* Large left box */}
-          <div
-            style={{
-              gridRow: "1 / 3",
-              backgroundColor: "transparent",
-              border: "2px solid #1a1a1a",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.3s ease",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#f8f8f8";
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
-            <div
-              style={{
-                width: "40px",
-                height: "40px",
-                backgroundColor: "#e5e5e5",
-                borderRadius: "50%",
-              }}
-            ></div>
-          </div>
-
-          {/* Top right box */}
-          <div
-            style={{
-              backgroundColor: "transparent",
-              border: "2px solid #1a1a1a",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.3s ease",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#f8f8f8";
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                backgroundColor: "#e5e5e5",
-                borderRadius: "50%",
-              }}
-            ></div>
-          </div>
-
-          {/* Bottom right box */}
-          <div
-            style={{
-              backgroundColor: "transparent",
-              border: "2px solid #1a1a1a",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.3s ease",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#f8f8f8";
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                backgroundColor: "#e5e5e5",
-                borderRadius: "50%",
-              }}
-            ></div>
-          </div>
-        </div>
-
-        {/* Get Started Button */}
+          Make better food choices with a single scan
+        </p>
         <div
+          className="mt-8 animate-pulse"
           style={{
-            marginTop: "auto",
-            marginBottom: "40px",
+            marginTop: "48px",
           }}
         >
-          {" "}
-          <button
+          <div
+            className="w-12 h-12 mx-auto rounded-full"
             style={{
-              width: "100%",
               backgroundColor: "#1a4e3a",
-              color: "white",
-              border: "none",
-              borderRadius: "12px",
-              padding: "18px",
-              fontSize: "18px",
-              fontWeight: "600",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              letterSpacing: "0.3px",
+              width: "48px",
+              height: "48px",
+              margin: "0 auto",
+              borderRadius: "50%",
             }}
-            onClick={() => setShowOnboarding(true)}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#145032";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 8px 25px rgba(26, 78, 58, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#1a4e3a";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-          >
-            Get Started
-          </button>
+          ></div>
         </div>
       </div>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .nutriscan-container {
-            max-width: 400px;
-            margin: 0 auto;
-          }
-        }
-        
-        @media (min-width: 1024px) {
-          .nutriscan-container {
-            padding: 40px;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .nutriscan-grid {
-            height: 280px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { User, Building2 } from "lucide-react";
+import { User } from "lucide-react";
 import { RoleOption } from "@/types/userflow";
 
 export const ROLE_OPTIONS: RoleOption[] = [
@@ -13,19 +13,6 @@ export const ROLE_OPTIONS: RoleOption[] = [
       "Make Purchases",
       "Track Orders",
       "Rate & Review",
-    ],
-  },
-  {
-    id: "business",
-    title: "Apply for Business License",
-    description: "Get verified and sell your products on our platform",
-    icon: <Building2 className="w-6 h-6" />,
-    color: "#00C174", // Solid green color
-    features: [
-      "Business Verification",
-      "Vendor Dashboard",
-      "Product Management",
-      "Analytics & Insights",
     ],
   },
 ];
