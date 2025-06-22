@@ -59,7 +59,7 @@ const StepIndicator = ({
             }}
           >
             <Image
-              src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750475065/Vector_ug5wsz.png"
+              src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750560411/Vector_guwvbf.svg"
               alt="Progress indicator"
               width={24}
               height={24}
