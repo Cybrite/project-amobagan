@@ -62,6 +62,24 @@ interface WeeklyTodoResponse {
   completion_rate: number;
 }
 
+interface NutritionFeedback {
+  count: number;
+  message: string;
+  priority: string;
+  type: string;
+}
+
+interface NutritionDetailsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    feedback: NutritionFeedback[];
+    nutritionPriorities: string[];
+    nutritionalStatus: Record<string, unknown>;
+  };
+  timestamp: string;
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -78,6 +96,10 @@ export default function Dashboard() {
     { day: "Sat", date: "17" },
   ]);
   const [showAllTasks, setShowAllTasks] = useState(false);
+  const [, setNutritionDetails] = useState<NutritionDetailsResponse | null>(
+    null
+  );
+  const [, setLoadingNutrition] = useState<boolean>(false);
 
   // Animation variants
   const pageVariants = {
@@ -240,6 +262,32 @@ export default function Dashboard() {
     router.push("/scan");
   };
 
+  // Fetch nutrition details
+  const fetchNutritionDetails = useCallback(async () => {
+    setLoadingNutrition(true);
+    try {
+      const token = getAuthToken();
+      const response = await fetch(`${SERVER_URL}/api/user/nutrition-details`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setNutritionDetails(data);
+      } else {
+        console.error("Failed to fetch nutrition details:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching nutrition details:", error);
+    } finally {
+      setLoadingNutrition(false);
+    }
+  }, []);
+
   // Initialize dashboard on load
   useEffect(() => {
     fetchCurrentWeekTodos();
@@ -277,6 +325,13 @@ export default function Dashboard() {
   // Check if we have data to show
   const hasData =
     weeklyData && weeklyData.daily_todos && weeklyData.daily_todos.length > 0;
+
+  // Fetch nutrition details when data is available
+  useEffect(() => {
+    if (hasData) {
+      fetchNutritionDetails();
+    }
+  }, [hasData, fetchNutritionDetails]);
 
   return (
     <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center p-4">
