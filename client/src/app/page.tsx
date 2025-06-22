@@ -27,8 +27,8 @@ export default function LandingPage() {
       <Image
         src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750537445/ChatGPT_Image_Jun_22_2025_12_34_08_AM_t2mgyn.png"
         alt="NutriScan Landing"
-        fill
-        sizes="100vw"
+        width={500}
+        height={500}
         priority
         style={{
           objectFit: "cover",

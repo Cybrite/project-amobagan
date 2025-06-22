@@ -40,7 +40,7 @@ export default function CarouselPage() {
       setCurrentIndex((prevIndex) =>
         prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
       );
-    }, 2000);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, []);
