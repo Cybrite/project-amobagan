@@ -16,7 +16,7 @@ export default function WelcomePage() {
 
   return (
     <div className="min-h-screen bg-[#F5F3F0] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      <div className="w-full max-w-sm space-y-16 z-30 flex-col justify-center">
+      <div className="w-full max-w-sm space-y-16 z-30 flex-row justify-center">
         {/* Header Section */}
         <div className="absolute top-1 left-0 text-center space-y-8 animate-fade-in-up z-10 backdrop-blur-3xl py-2">
           <div className="space-y-4">
@@ -27,19 +27,25 @@ export default function WelcomePage() {
             A Community driven initiative to let you make better food choices
           </p>
         </div>
-        <div className="absolute top-40 left-0 w-full h-full flex items-center justify-center ">
+        <div className="absolute top-20 left-0 w-full h-full flex items-center justify-center ">
           <Image
-            src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750537876/Phone_3a_Pro_mockup_silver_left_label_m2kvok.png"
-            height={120}
-            width={250}
+            src="https://res.cloudinary.com/dqqyuvg1v/image/upload/v1750553055/Phone_3a_Pro_mockup_silver_portrait_uvzdui.png"
+            height={150}
+            width={150}
             alt={""}
           />
         </div>{" "}
         {/* Buttons Section */}
-        <div className="bg-white w-screen h-60 z-100">
+        <div
+          className="h-[100px] w-full z-100 absolute top-90"
+          style={{
+            background: `linear-gradient(0deg, #F0EDE4 19.8%, rgba(255, 255, 255, 0.00) 115.84%)`,
+          }}
+        ></div>
+        <div className="bg-white w-screen h-60 z-100 flex-col justify-center">
           <div
-            className="absolute bottom-0 left-0 right-0 space-y-8 animate-fade-in-up-more-delayed backdrop-blur-2xl bg-white/30 rounded-t-3xl p-6 z-20"
-            style={{ marginBottom: "60px" }}
+            className="absolute bottom-0 left-0 right-0 space-y-8 animate-fade-in-up-more-delayed bg-white/30 rounded-t-3xl p-6 z-20 backdrop-blur-2xl"
+            style={{ marginBottom: "20px" }}
           >
             <Button
               onClick={handleGetStarted}
